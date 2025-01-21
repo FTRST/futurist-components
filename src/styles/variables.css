@@ -1,0 +1,12 @@
+/* src/styles/variables.css */
+:root {
+    --font-primary: 'Print Char';
+    --font-secondary: 'Georgia, serif';
+    --font-mono: 'Courier New, monospace';
+    --font-size-small: 12px;
+    --font-size-medium: 16px;
+    --font-size-large: 20px;
+    --font-weight-normal: 400;
+    --font-weight-bold: 700;
+  }
+  
