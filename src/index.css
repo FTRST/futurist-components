@@ -2,7 +2,7 @@
   font-family: 'Print Char';
   font-weight: 400;
 
-  color: lime;
+  color: #6bf178;
   background-color: black;
 
   font-synthesis: none;
@@ -55,7 +55,7 @@ h1 {
   height: 400px;
   width: 800px;
   background-color: red;
-  border: solid .1em lime;
+  border: solid .1em #6bf178;
   margin: auto;
 }
 

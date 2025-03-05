@@ -5,6 +5,7 @@ import Tab from '../Tab/Tab';  // Ensure this path is correct
 
 const tabs = {
     default: css`
+        display: flex;
     `
 };
 

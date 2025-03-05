@@ -104,11 +104,11 @@ function App() {
         device={device} 
         shortcuts={[{ 
           icon: 'https://futurist.io/icons/folder.png', 
-          title: 'Big Boinger', 
+          title: 'Example App', 
           id: "694",
           windowData: {
             id: "example",
-            title: "boinger",
+            title: "Example App",
             width: "300px",
             height: "300px"
           }
