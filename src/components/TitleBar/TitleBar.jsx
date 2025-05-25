@@ -58,7 +58,7 @@ const StyledCloseButton = styled.button`
 const maximizeButtonStyle = {
   default: css`
     margin: auto;
-    background-color: blue;
+    background-color: #02111b;
     color: #6bf178;
     margin-right: 0;
     margin-left: 1vh;

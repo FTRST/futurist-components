@@ -14,3 +14,7 @@ export const nestedInputChange = (sub, key, value, stateFunction) => {
 export const tabSelector = (tabName, stateFunction) => {
     stateFunction(tabName);
 };
+
+export const openLink = (linkUrl) => {
+    window.open(linkUrl, "_blank", "nooopen,noreferrer")
+}

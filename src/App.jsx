@@ -18,6 +18,7 @@ import WindowSpacing from './components/WindowSpacing/WindowSpacing';
 import WindowInset from './components/WindowInset/WindowInset';
 
 import {nestedInputChange} from './utils/componentControls';
+import { BaseContainer } from './components';
 
 // Define tab content components
 const CreatorTab = ({ windowDetails, setWindowDetails, incrementCount, inputRef }) => {
@@ -80,7 +81,9 @@ function App() {
           title: windowDetails.details.title,
           width: "300px",
           height: "400px",
-          zIndex: 99999
+          zIndex: 99999,
+          xCoord: 40,
+          yCoord: 300
         }
       });
     }
@@ -110,7 +113,9 @@ function App() {
             id: "example",
             title: "Example App",
             width: "300px",
-            height: "300px"
+            height: "300px",
+            xCoord: 100,
+            yCoord: 100
           }
         }]} 
         manipulateWindows={manipulateWindows} 
@@ -131,7 +136,10 @@ function App() {
         <TabContainer tabComponents={tabComponents} />
         {device?.windows?.map((window, index) => (
           <BaseWindow key={index} id={window.id} device={device} manipulateWindows={manipulateWindows}>
-            <span>just some text</span>
+            <BaseContainer>
+              <span>just some text</span>
+              <Button label="an example" />
+            </BaseContainer>
           </BaseWindow>
         ))}
       </div>

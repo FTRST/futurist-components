@@ -1,3 +1,4 @@
+export { default as BaseContainer } from './BaseContainer/BaseContainer.jsx';
 export { default as BaseWindow } from './BaseWindow/BaseWindow.jsx';
 export { default as Button } from './Button/Button.jsx';
 export { default as Input } from './Input/Input.jsx';
