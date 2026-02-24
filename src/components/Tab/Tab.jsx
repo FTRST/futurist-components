@@ -1,28 +1,28 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 
-const tabStyles = {
+const tabStyles = (settings) => ({
     default: css`
         background-color: rebeccapurple;
-        color: #6bf178;
+        color: ${settings?.titleBar?.textColor || '#6bf178'};
         border-bottom: none;
-        border-color: #02111B;
+        border-color: ${settings?.window?.borderColor || '#6bf178'};
         padding: 0.5em;
     `,
     defaultSelected: css`
-        background-color: #02111B;
-        color: #6bf178;
-        border: solid 0.1em #6bf178;
+        background-color: ${settings?.button?.primaryBg || '#02111B'};
+        color: ${settings?.titleBar?.textColor || '#6bf178'};
+        border: ${settings?.borders?.style || 'solid'} ${settings?.borders?.width || '0.1em'} ${settings?.window?.borderColor || '#6bf178'};
         padding: 0.5em;
     `
-};
+});
 
 const StyledTab = styled.button`
-    ${props => tabStyles[props.selected ? `${props.variant}Selected` : props.variant]}
+    ${props => tabStyles(props.styleSettings)[props.selected ? `${props.variant}Selected` : props.variant]}
     ${props => props.additionalStyles}
 `;
 
-const Tab = React.forwardRef(({ label, action, selected, variant = 'default', style}, ref) => {
+const Tab = React.forwardRef(({ label, action, selected, variant = 'default', style, styleSettings }, ref) => {
     
     const className = `futurist-${variant}${selected ? '-tab-selected' : '-tab'}`;
 
@@ -34,6 +34,7 @@ const Tab = React.forwardRef(({ label, action, selected, variant = 'default', st
             variant={variant}
             className={className}
             additionalStyles={style}
+            styleSettings={styleSettings}
         >
             {label}
         </StyledTab>

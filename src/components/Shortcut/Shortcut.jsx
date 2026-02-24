@@ -16,15 +16,15 @@ const ShortcutIcon = styled.img`
 `;
 
 const ShortcutName = styled.div`
-    background-color: #6bf178;
-    color: #02111b;
+    background-color: ${props => props.theme?.titleBar?.textColor || '#6bf178'};
+    color: ${props => props.theme?.button?.primaryBg || '#02111b'};
     padding: .25em;
     align-items: center;
     display: grid;
     text-align: center;
 `;
 
-const Shortcut = ({width, icon, name, action}) => {
+const Shortcut = ({width, icon, name, action, styleSettings}) => {
     // Mobile handler
     let [dragInfo, setDragInfo] = useState(null);
 
@@ -54,23 +54,23 @@ const Shortcut = ({width, icon, name, action}) => {
                 width < 600 ? (
                     <>
                         <Draggable onStart={handleDragStart} onStop={handleDragStop}>
-                            <StyledShortcut onClick={action}>
-                                <div>
-                                    <ShortcutIcon src={icon}></ShortcutIcon>
-                                </div>
-                                <ShortcutName>{name}</ShortcutName>
-                            </StyledShortcut>
+<StyledShortcut onClick={action}>
+                                 <div>
+                                     <ShortcutIcon src={icon}></ShortcutIcon>
+                                 </div>
+                                 <ShortcutName theme={{ titleBar: { textColor: styleSettings?.titleBar?.textColor }, button: { primaryBg: styleSettings?.button?.primaryBg } }}>{name}</ShortcutName>
+                             </StyledShortcut>
                         </Draggable>
                     </>
                 )
                 :
                     <Draggable>
-                        <StyledShortcut onClick={action}>
-                            <div>
-                                <ShortcutIcon src={icon}></ShortcutIcon>
-                            </div>
-                            <ShortcutName>{name}</ShortcutName>
-                        </StyledShortcut>
+<StyledShortcut onClick={action}>
+                             <div>
+                                 <ShortcutIcon src={icon}></ShortcutIcon>
+                             </div>
+                             <ShortcutName theme={{ titleBar: { textColor: styleSettings?.titleBar?.textColor }, button: { primaryBg: styleSettings?.button?.primaryBg } }}>{name}</ShortcutName>
+                         </StyledShortcut>
                     </Draggable>
             }
         </>

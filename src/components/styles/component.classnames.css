@@ -1,0 +1,211 @@
+/* Component Classnames for futurist-components */
+
+/* Button */
+.futurist-button,
+.futurist-default-button {
+  color: #6BF178;
+  background-color: #02111B;
+  padding: 0.5em;
+  border: outset medium #6BF178;
+  outline: solid .1em #02111B;
+}
+
+.futurist-button-inverted,
+.futurist-inverted-button {
+  color: #02111B;
+  background-color: #6BF178;
+  border: outset medium #6BF178;
+  padding: .5em;
+  outline: solid .1em #02111B;
+}
+
+/* Tab */
+.futurist-tab {
+  background-color: rebeccapurple;
+  color: #6bf178;
+  border-bottom: none;
+  border-color: #02111B;
+  padding: 0.5em;
+}
+
+.futurist-tab-selected {
+  background-color: #02111B;
+  color: #6bf178;
+  border: solid 0.1em #6bf178;
+  padding: 0.5em;
+}
+
+/* WindowInset */
+.futurist-window-inset,
+.futurist-default-window-inset {
+  background-color: #02111B;
+  margin: .5em .25em .25em;
+  padding: .25em;
+  border: .25em inset #6bf178;
+}
+
+/* WindowSpacing */
+.futurist-window-spacing,
+.futurist-default-window-spacing {
+  padding: .5em;
+  background-color: rebeccapurple;
+}
+
+/* WindowInner */
+.futurist-window-inner,
+.futurist-default-window-inner {
+  border: .25em ridge #6bf178;
+  background-color: #02111B;
+  padding: .5em;
+  color: #6bf178;
+}
+
+/* WindowTitle */
+.futurist-window-title,
+.futurist-default-window-title {
+  margin: auto;
+  text-align: center;
+  background-color: #02111B;
+  color: #6BF178;
+  margin-bottom: .5em;
+  width: 75%;
+  padding: .5em;
+  margin-top: -2.25em;
+  border: double .25em;
+  line-height: 1.2;
+}
+
+/* TabContainer */
+.futurist-tab-container,
+.futurist-default-tab-container {
+  display: grid;
+  border: solid .15em #02111B;
+  padding: .5em;
+  background-color: #6bf178;
+  box-shadow: .25em .25em #02111B;
+  color: #6BF178;
+}
+
+.futurist-tabs,
+.futurist-default-tabs {
+  display: flex;
+}
+
+/* BaseWindow */
+.futurist-window,
+.futurist-default-window {
+  top: 30%;
+  max-width: 100%;
+  position: absolute;
+  color: #6BF178;
+  left: 1em;
+  padding: 0;
+  border: .25em double #6BF178;
+  background-color: rgba(2,17,27,.7);
+}
+
+.futurist-window-background,
+.futurist-default-window-background {
+  display: grid;
+  padding: .5em;
+  background-color: rebeccapurple;
+  box-sizing: border-box;
+}
+
+/* TitleBar */
+.futurist-title-bar,
+.futurist-default-title-bar {
+  display: flex;
+  background-color: #02111b;
+  color: #6bf178;
+  border-bottom: solid 0.1em #6bf178;
+}
+
+.futurist-title-tray,
+.futurist-default-title-tray {
+  max-width: 100%;
+  display: flex;
+}
+
+.futurist-title,
+.futurist-default-title {
+  width: 100%;
+  margin: auto;
+  padding: 0.75em;
+}
+
+.futurist-close-button,
+.futurist-default-close-button {
+  margin: auto;
+  z-index: 999999;
+  margin-right: 1vh;
+  color: #02111B;
+  background-color: #F50000;
+  border: outset .15em #6BF178;
+  font-weight: 700;
+}
+
+.futurist-maximize-button,
+.futurist-default-maximize-button {
+  margin: auto;
+  background-color: blue;
+  color: #6bf178;
+  margin-right: 0;
+  margin-left: 1vh;
+  z-index: 999999;
+  border: outset .15em #6bf178;
+  font-weight: 700;
+}
+
+.futurist-minimize-button,
+.futurist-default-minimize-button {
+  margin: auto;
+  background-color: yellow;
+  color: #02111b;
+  margin-right: 0;
+  margin-left: 1vh;
+  z-index: 999999;
+  border: outset .15em #6BF178;
+  font-weight: 700;
+}
+
+/* Input */
+.futurist-input,
+.futurist-default-input {
+  text-align: center;
+  color: #6bf178;
+  padding: .5em;
+  background-color: #02111b;
+  border: ridge .25em #6bf178;
+}
+
+/* Message Container */
+.futurist-message-container,
+.futurist-default-message-container {
+  overflow-y: auto;
+  box-sizing: border-box;
+  height: 100%;
+}
+
+/* Shortcut */
+.futurist-shortcut {
+  padding: 1em;
+  align-items: center;
+  display: grid;
+  text-align: center;
+  height: 8em;
+  width: 9em;
+}
+
+.futurist-shortcut-icon {
+  height: 4em;
+}
+
+.futurist-shortcut-name {
+  background-color: #6bf178;
+  color: #02111b;
+  padding: .25em;
+  align-items: center;
+  display: grid;
+  text-align: center;
+}

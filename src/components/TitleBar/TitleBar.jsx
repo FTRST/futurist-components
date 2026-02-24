@@ -2,17 +2,15 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 
-const titleBarStyle = {
-  default: css`
-    display: flex;
-    background-color: #02111b;
-    color: #6bf178;
-    border-bottom: solid 0.1em #6bf178;
-  `
-};
+const titleBarStyle = (settings) => css`
+  display: flex;
+  background-color: ${settings?.titleBar?.backgroundColor || '#02111b'};
+  color: ${settings?.titleBar?.textColor || '#6bf178'};
+  border-bottom: ${settings?.borders?.style || 'double'} ${settings?.borders?.width || '0.1em'} ${settings?.window?.borderColor || '#6bf178'};
+`;
 
 const StyledTitleBar = styled.strong`
-  ${props => titleBarStyle[props.variant || 'default']}
+  ${props => titleBarStyle(props.styleSettings)}
   ${props => props.additionalStyle}
 `;
 
@@ -39,62 +37,57 @@ const StyledTitle = styled.div`
   ${props => titleStyle[props.variant || 'default']}
 `;
 
-const closeButtonStyle = {
-  default: css`
-    margin: auto;
-    z-index: 999999;
-    margin-right: 1vh;
-    color: #02111B;
-    background-color: #F50000;
-    border: outset .15em #6BF178;
-    font-weight: 700;
-  `
-};
+const closeButtonStyle = (settings) => css`
+  margin: auto;
+  z-index: 999999;
+  margin-right: 1vh;
+  color: ${settings?.button?.primaryBg || '#02111B'};
+  background-color: ${settings?.window?.borderColor || '#F50000'};
+  border: outset ${settings?.borders?.width || '.15em'} ${settings?.window?.borderColor || '#6BF178'};
+  font-weight: 700;
+`;
 
 const StyledCloseButton = styled.button`
-  ${props => closeButtonStyle[props.variant || 'default']}
+  ${props => closeButtonStyle(props.styleSettings)}
 `;
 
-const maximizeButtonStyle = {
-  default: css`
-    margin: auto;
-    background-color: blue;
-    color: #6bf178;
-    margin-right: 0;
-    margin-left: 1vh;
-    z-index: 999999;
-    border: outset .15em #6bf178;
-    font-weight: 700;
-  `
-};
+const maximizeButtonStyle = (settings) => css`
+  margin: auto;
+  background-color: blue;
+  color: ${settings?.titleBar?.textColor || '#6bf178'};
+  margin-right: 0;
+  margin-left: 1vh;
+  z-index: 999999;
+  border: outset ${settings?.borders?.width || '.15em'} ${settings?.window?.borderColor || '#6bf178'};
+  font-weight: 700;
+`;
 
 const StyledMaximizeButton = styled.button`
-  ${props => maximizeButtonStyle[props.variant || 'default']}
+  ${props => maximizeButtonStyle(props.styleSettings)}
 `;
 
-const minimizeButtonStyle = {
-  default: css`
-    margin: auto;
-    background-color: yellow;
-    color: #02111b;
-    margin-right: 0;
-    margin-left: 1vh;
-    z-index: 999999;
-    border: outset .15em #6bf178;
-    font-weight: 700;
-  `
-};
+const minimizeButtonStyle = (settings) => css`
+  margin: auto;
+  background-color: yellow;
+  color: ${settings?.button?.primaryBg || '#02111b'};
+  margin-right: 0;
+  margin-left: 1vh;
+  z-index: 999999;
+  border: outset ${settings?.borders?.width || '.15em'} ${settings?.window?.borderColor || '#6BF178'};
+  font-weight: 700;
+`;
 
 const StyledMinimizeButton = styled.button`
-  ${props => minimizeButtonStyle[props.variant || 'default']}
+  ${props => minimizeButtonStyle(props.styleSettings)}
 `;
 
-const TitleBar = React.forwardRef(({ title, expandAction, closeAction, minimizeAction, variant = "default", style, maximize = false}, ref) => (
+const TitleBar = React.forwardRef(({ title, expandAction, closeAction, minimizeAction, variant = "default", style, maximize = false, styleSettings }, ref) => (
   <StyledTitleBar prevHeight
     className="modal-title-bar"
     ref={ref} 
     variant={variant}
     additionalStyle={style}
+    styleSettings={styleSettings}
   >
     {
       !maximize ? (
@@ -103,6 +96,7 @@ const TitleBar = React.forwardRef(({ title, expandAction, closeAction, minimizeA
             className="modal-maximize"
             onClick={expandAction} 
             onTouchStart={expandAction}
+            styleSettings={styleSettings}
           >
             O
           </StyledMaximizeButton>
@@ -114,6 +108,7 @@ const TitleBar = React.forwardRef(({ title, expandAction, closeAction, minimizeA
             className="modal-maximize"
             onClick={minimizeAction} 
             onTouchStart={minimizeAction}
+            styleSettings={styleSettings}
           >
             .
           </StyledMinimizeButton>
@@ -129,6 +124,7 @@ const TitleBar = React.forwardRef(({ title, expandAction, closeAction, minimizeA
         className="modal-close"
         onClick={closeAction}
         onTouchStart={closeAction}
+        styleSettings={styleSettings}
       >
         X
       </StyledCloseButton>

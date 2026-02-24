@@ -2,7 +2,7 @@ import React from 'react';
 import Shortcut from '../Shortcut/Shortcut';
 import { openWindow } from '../../utils/windowControls';
 
-const ShortcutContainer = ({ device, shortcuts, manipulateWindows }) => {
+const ShortcutContainer = ({ device, shortcuts, manipulateWindows, styleSettings }) => {
   console.log(device);
   return (
     <>
@@ -13,6 +13,7 @@ const ShortcutContainer = ({ device, shortcuts, manipulateWindows }) => {
           icon={shortcut.icon}
           name={shortcut.title}
           action={() => openWindow(manipulateWindows, shortcut.windowData)}
+          styleSettings={styleSettings}
         />
       ))}
     </>

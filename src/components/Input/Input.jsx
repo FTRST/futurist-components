@@ -1,22 +1,22 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 
-const inputStyles = {
+const inputStyles = (settings) => ({
     default: css`
         text-align: center;
-        color: #6bf178;
+        color: ${settings?.titleBar?.textColor || '#6bf178'};
         padding: .5em;
-        background-color: #02111b;
-        border: ridge .25em #6bf178;
+        background-color: ${settings?.button?.primaryBg || '#02111b'};
+        border: ridge ${settings?.borders?.width || '.25em'} ${settings?.window?.borderColor || '#6bf178'};
     `
-};
+});
 
 const StyledInput = styled.input`
-    ${props => inputStyles[props.variant || 'default']}
+    ${props => inputStyles(props.styleSettings)[props.variant || 'default']}
     ${props => props.additionalStyles}
 `;
 
-const Input = React.forwardRef(({ value, action, variant = 'default', name = null, placeholder = null, style}, ref) => (
+const Input = React.forwardRef(({ value, action, variant = 'default', name = null, placeholder = null, style, styleSettings }, ref) => (
     <StyledInput
         onChange={action}
         ref={ref}
@@ -25,6 +25,7 @@ const Input = React.forwardRef(({ value, action, variant = 'default', name = nul
         placeholder={placeholder}
         className={`futurist-${variant !== 'default' ? `${variant}-`: ''}button`}
         additionalStyles={style}
+        styleSettings={styleSettings}
     />
 ));
 

@@ -22,8 +22,12 @@ export default defineConfig({
     }
   },
   server: {
+    hmr: {
+      overlay: true,
+      clientPort: 5173
+    },
     watch: {
-      ignored: ['**/node_modules/**', '**/**']
+      ignored: ['**/node_modules/**']
     }
   }
 });

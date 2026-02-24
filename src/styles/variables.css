@@ -1,5 +1,6 @@
 /* src/styles/variables.css */
 :root {
+    /* Typography */
     --font-primary: 'Print Char';
     --font-secondary: 'Georgia, serif';
     --font-mono: 'Courier New, monospace';
@@ -8,5 +9,39 @@
     --font-size-large: 20px;
     --font-weight-normal: 400;
     --font-weight-bold: 700;
-  }
+
+    /* Color Palette - Primary */
+    --color-primary-text: #6BF178;
+    --color-primary-bg: #02111B;
+
+    /* Color Palette - Secondary */
+    --color-secondary-bg: rebeccapurple;
+    --color-secondary-accent: #6bf178;
+
+    /* Color Palette - UI Elements */
+    --color-border-light: #6BF178;
+    --color-border-dark: #02111B;
+    --color-highlight: #F50000;
+    --color-action-blue: blue;
+    --color-action-yellow: yellow;
+
+    /* Component Colors */
+    --color-window-bg: rgba(2,17,27,.7);
+    --color-window-border: #6BF178;
+    --color-titlebar-bg: #02111b;
+    --color-titlebar-border: #6bf178;
+
+    /* Spacing */
+    --spacing-unit: 0.5em;
+    --spacing-small: 0.25em;
+    --spacing-large: 1em;
+
+    /* Borders */
+    --border-width-thin: 0.1em;
+    --border-width-medium: 0.15em;
+    --border-width-thick: 0.25em;
+
+    /* Shadows */
+    --shadow-color: #02111B;
+}
   
