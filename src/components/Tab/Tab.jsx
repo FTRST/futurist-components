@@ -22,9 +22,9 @@ const StyledTab = styled.button`
     ${props => props.additionalStyles}
 `;
 
-const Tab = React.forwardRef(({ label, action, selected, variant = 'default', style, styleSettings }, ref) => {
+const Tab = React.forwardRef(({ label, action, selected, variant = 'default', style, styleSettings, className }, ref) => {
     
-    const className = `futurist-${variant}${selected ? '-tab-selected' : '-tab'}`;
+    const tabClassName = `ftrst tab ${variant}${selected ? '-selected' : ''} ${className || ''}`;
 
     return (
         <StyledTab
@@ -32,7 +32,7 @@ const Tab = React.forwardRef(({ label, action, selected, variant = 'default', st
             ref={ref}
             selected={selected}
             variant={variant}
-            className={className}
+            className={tabClassName}
             additionalStyles={style}
             styleSettings={styleSettings}
         >

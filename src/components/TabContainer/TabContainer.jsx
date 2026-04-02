@@ -1,7 +1,6 @@
-// src/components/TabContainer/TabContainer.jsx
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
-import Tab from '../Tab/Tab';  // Ensure this path is correct
+import Tab from '../Tab/Tab';
 
 const tabs = {
     default: css`
@@ -29,8 +28,8 @@ const StyledTabContainer = styled.div`
   ${props => props.additionalStyle}
 `;
 
-const TabContainer = ({ tabComponents, style, styleSettings }) => {
-    const [activeTab, setActiveTab] = useState(Object.keys(tabComponents)[0]); // Default to the first tab
+const TabContainer = ({ tabComponents, style, styleSettings, className }) => {
+    const [activeTab, setActiveTab] = useState(Object.keys(tabComponents)[0]);
 
     const handleTabClick = (tabName) => {
         setActiveTab(tabName);
@@ -40,7 +39,7 @@ const TabContainer = ({ tabComponents, style, styleSettings }) => {
 
     return (
         <>
-            <StyledTabs>
+            <StyledTabs className="ftrst tabs">
                 {Object.keys(tabComponents).map(tabName => (
                     <Tab
                         key={tabName}
@@ -51,7 +50,11 @@ const TabContainer = ({ tabComponents, style, styleSettings }) => {
                     />
                 ))}
             </StyledTabs>
-            <StyledTabContainer additionalStyle={style} styleSettings={styleSettings}>
+            <StyledTabContainer 
+                additionalStyle={style} 
+                styleSettings={styleSettings}
+                className={`ftrst tab-container ${className || ''}`}
+            >
                 {ActiveComponent ? <ActiveComponent /> : null}
             </StyledTabContainer>
         </>

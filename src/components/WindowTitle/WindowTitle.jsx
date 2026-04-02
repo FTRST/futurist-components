@@ -21,10 +21,10 @@ const StyledWindowTitle = styled.h4`
     ${props => props.additionalStyles}
 `;
 
-const WindowTitle = React.forwardRef(({ value, variant = 'default', style, styleSettings }, ref) => (
+const WindowTitle = React.forwardRef(({ value, variant = 'default', style, styleSettings, className }, ref) => (
     <StyledWindowTitle
         ref={ref}
-        className={`futurist-${variant !== 'default' ? `${variant}-`: ''}window-title`}
+        className={`ftrst window-title ${variant !== 'default' ? `${variant}-` : ''}${className || ''}`}
         additionalStyles={style}
         styleSettings={styleSettings}
     >

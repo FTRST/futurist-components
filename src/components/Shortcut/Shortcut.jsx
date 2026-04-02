@@ -25,7 +25,6 @@ const ShortcutName = styled.div`
 `;
 
 const Shortcut = ({width, icon, name, action, styleSettings}) => {
-    // Mobile handler
     let [dragInfo, setDragInfo] = useState(null);
 
     let handleDragStart = (e, data) => {
@@ -54,23 +53,27 @@ const Shortcut = ({width, icon, name, action, styleSettings}) => {
                 width < 600 ? (
                     <>
                         <Draggable onStart={handleDragStart} onStop={handleDragStop}>
-<StyledShortcut onClick={action}>
-                                 <div>
-                                     <ShortcutIcon src={icon}></ShortcutIcon>
-                                 </div>
-                                 <ShortcutName theme={{ titleBar: { textColor: styleSettings?.titleBar?.textColor }, button: { primaryBg: styleSettings?.button?.primaryBg } }}>{name}</ShortcutName>
-                             </StyledShortcut>
+                            <div className="ftrst shortcut">
+                                <StyledShortcut onClick={action}>
+                                    <div>
+                                        <ShortcutIcon src={icon}></ShortcutIcon>
+                                    </div>
+                                    <ShortcutName theme={{ titleBar: { textColor: styleSettings?.titleBar?.textColor }, button: { primaryBg: styleSettings?.button?.primaryBg } }}>{name}</ShortcutName>
+                                </StyledShortcut>
+                            </div>
                         </Draggable>
                     </>
                 )
                 :
                     <Draggable>
-<StyledShortcut onClick={action}>
-                             <div>
-                                 <ShortcutIcon src={icon}></ShortcutIcon>
-                             </div>
-                             <ShortcutName theme={{ titleBar: { textColor: styleSettings?.titleBar?.textColor }, button: { primaryBg: styleSettings?.button?.primaryBg } }}>{name}</ShortcutName>
-                         </StyledShortcut>
+                        <div className="ftrst shortcut">
+                            <StyledShortcut onClick={action}>
+                                <div>
+                                    <ShortcutIcon src={icon}></ShortcutIcon>
+                                </div>
+                                <ShortcutName theme={{ titleBar: { textColor: styleSettings?.titleBar?.textColor }, button: { primaryBg: styleSettings?.button?.primaryBg } }}>{name}</ShortcutName>
+                            </StyledShortcut>
+                        </div>
                     </Draggable>
             }
         </>

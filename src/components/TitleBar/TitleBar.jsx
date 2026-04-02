@@ -81,9 +81,9 @@ const StyledMinimizeButton = styled.button`
   ${props => minimizeButtonStyle(props.styleSettings)}
 `;
 
-const TitleBar = React.forwardRef(({ title, expandAction, closeAction, minimizeAction, variant = "default", style, maximize = false, styleSettings }, ref) => (
-  <StyledTitleBar prevHeight
-    className="modal-title-bar"
+const TitleBar = React.forwardRef(({ title, expandAction, closeAction, minimizeAction, variant = "default", style, maximize = false, styleSettings, className }, ref) => (
+  <StyledTitleBar 
+    className={`ftrst title-bar modal-title-bar ${variant !== 'default' ? `${variant}-` : ''}${className || ''}`}
     ref={ref} 
     variant={variant}
     additionalStyle={style}
@@ -93,7 +93,7 @@ const TitleBar = React.forwardRef(({ title, expandAction, closeAction, minimizeA
       !maximize ? (
         <>
           <StyledMaximizeButton 
-            className="modal-maximize"
+            className="ftrst maximize-button modal-maximize"
             onClick={expandAction} 
             onTouchStart={expandAction}
             styleSettings={styleSettings}
@@ -105,7 +105,7 @@ const TitleBar = React.forwardRef(({ title, expandAction, closeAction, minimizeA
       :
         <>
           <StyledMinimizeButton 
-            className="modal-maximize"
+            className="ftrst minimize-button modal-maximize"
             onClick={minimizeAction} 
             onTouchStart={minimizeAction}
             styleSettings={styleSettings}
@@ -115,13 +115,13 @@ const TitleBar = React.forwardRef(({ title, expandAction, closeAction, minimizeA
         </>
     }
     <StyledTitle
-      className="modal-title"
+      className="ftrst title modal-title"
     >
       {title}
     </StyledTitle>
-    <StyledTitleTray>
+    <StyledTitleTray className="ftrst title-tray">
       <StyledCloseButton
-        className="modal-close"
+        className="ftrst close-button modal-close"
         onClick={closeAction}
         onTouchStart={closeAction}
         styleSettings={styleSettings}

@@ -1,5 +1,5 @@
 // src/components/BaseWindow/BaseWindow.jsx
-import React, { useRef, useState, useEffect, useMemo, createContext } from 'react';
+import React, { useRef, useState, useEffect, createContext } from 'react';
 import Draggable from "react-draggable";
 import { Resizable } from 're-resizable';
 import TitleBar from '../TitleBar/TitleBar';
@@ -15,12 +15,14 @@ const windowStyle = (settings) => css`
     color: ${settings?.titleBar?.textColor || '#6BF178'};
     left: 1em;
     padding: 0;
+    box-sizing: border-box;
     border: ${settings?.borders?.width || '.25em'} ${settings?.borders?.style || 'double'} ${settings?.window?.borderColor || '#6BF178'};
     background-color: ${settings?.window?.backgroundColor || 'rgba(2,17,27,.7)'};
 `;
 
 const StyledWindow = styled.div`
     ${props => windowStyle(props.styleSettings)}
+    ${props => props.additionalStyle}
 `;
 
 const windowBackgroundStyle = (settings) => css`
@@ -41,11 +43,12 @@ const BaseWindow = ({
     manipulateWindows,
     children,
     style,
-    styleSettings
+    styleSettings,
+    className
 }) => {
     
     const windowDetails = device.windows.find(w => w.id === id);
-    const titleBarRef = useRef(null); // Create a ref for the TitleBar
+    const titleBarRef = useRef(null);
     const innerBodyRef = useRef(null);
     const modalBackgroundRef = useRef(null);
 
@@ -62,26 +65,19 @@ const BaseWindow = ({
             let newHeight = windowDetails.maximize ? '100%' : `calc(${windowDetails.height} - ${titleBarHeight}px - ${borderSize}px)`;
             let newWidth = windowDetails.maximize ? '100%' : `calc(${windowDetails.width} - ${titleBarRef.current.offsetWidth}px - ${borderSize}px)`;
             
-            console.log(titleBarHeight);
-
             setModalBackgroundHeight(newHeight);
             setModalBackgroundWidth(newWidth);
 
             const parentPixelHeight = modalBackgroundRef.current.offsetHeight;
             const titleBarPixelHeight = titleBarRef.current.offsetHeight;
-            const messageContainerHeight = parentPixelHeight - titleBarPixelHeight;
             
             if (innerBodyRef.current) {
                 innerBodyRef.current.style.height = '100%';
             }
-            
-            const newSize = { width: newWidth, height: newHeight }
-
         }
     }, [windowDetails, styleSettings]);
 
     const handlePositionChange = (e) => {
-
         let topWindowId = null;
         let maxZIndex = -Infinity;
 
@@ -97,23 +93,18 @@ const BaseWindow = ({
         }
     };
 
-const handleResizeStop = (e, direction, ref, delta, position) => {
+    const handleResizeStop = (e, direction, ref, delta, position) => {
         const newSize = { width: ref.style.width, height: ref.style.height };
-         
+        const borderSize = styleSettings?.borders?.width ? parseFloat(styleSettings.borders.width) * 2 : 0.5;
+          
 
-        if(parseInt(newSize.width) > (device.width - 20)) {
-            console.log("maxiing size")
-            newSize.width = `${device.width - 20}px`;
+        if(parseInt(newSize.width) > (device.width - borderSize)) {
+            newSize.width = `${device.width - borderSize}px`;
         }
 
-        if(parseInt(newSize.height) > (device.height - 55)) {
-            console.log("Height ad")
-            console.log(newSize.height)
-            console.log(device.height)
-            newSize.height = `${device.height - 55}px`;
+        if(parseInt(newSize.height) > (device.height - borderSize)) {
+            newSize.height = `${device.height - borderSize}px`;
         }
-
-        console.log("Inner width is:", modalInnerHeight)
         
         resizeWindow(manipulateWindows, id, {
             ...newSize,
@@ -133,7 +124,12 @@ const handleResizeStop = (e, direction, ref, delta, position) => {
                     onStart={handlePositionChange}
                     onDrag={(e, data) => setDragPosition({ x: data.x, y: data.y })}
                 >
-                    <StyledWindow style={{ top: windowDetails.maximize ? '0px' : (windowDetails.top || '30%'), left: windowDetails.maximize ? '0px' : (windowDetails.left || '1em'), zIndex: windowDetails.zIndex }} additionalStyle={style} styleSettings={styleSettings}>
+                    <StyledWindow 
+                        className={`ftrst window ${className || ''}`}
+                        style={{ top: windowDetails.maximize ? '0px' : (windowDetails.top || '30%'), left: windowDetails.maximize ? '0px' : (windowDetails.left || '1em'), zIndex: windowDetails.zIndex }} 
+                        additionalStyle={style} 
+                        styleSettings={styleSettings}
+                    >
                         <Resizable
                             size={{ width: windowDetails.width, height: windowDetails.height }}
                             onResizeStop={handleResizeStop}
@@ -145,15 +141,21 @@ const handleResizeStop = (e, direction, ref, delta, position) => {
                                 title={windowDetails.title} 
                                 expandAction={() => {
                                     const titleBarHeight = titleBarRef.current?.offsetHeight || 0;
+                                    const borderSize = styleSettings?.borders?.width ? parseFloat(styleSettings.borders.width) * 2 : 0.5;
                                     setDragPosition({ x: 0, y: 0 });
-                                    resizeWindow(manipulateWindows, id, {width: device.width, height: device.height, maximize: true, prevWidth: windowDetails.width, prevHeight: windowDetails.height, prevTop: windowDetails.top, prevLeft: windowDetails.left, top: titleBarHeight, left: 0})
+                                    resizeWindow(manipulateWindows, id, {width: device.width, height: device.height, maximize: true, prevWidth: windowDetails.prevWidth, prevHeight: windowDetails.prevHeight, prevTop: windowDetails.top, prevLeft: windowDetails.left, top: titleBarHeight, left: 0})
                                 }} 
                                 closeAction={() => closeWindow(manipulateWindows, id)} 
                                 minimizeAction={() => resizeWindow(manipulateWindows, id, {width: windowDetails.prevWidth, height: windowDetails.prevHeight, maximize: false, top: windowDetails.prevTop, left: windowDetails.prevLeft})}
                                 maximize={windowDetails.maximize}
                                 styleSettings={styleSettings}
                             />
-                            <StyledWindowBackground ref={modalBackgroundRef} style={{ height: windowDetails.maximize ? `calc(100% - ${titleBarRef.current?.offsetHeight || 0}px)` : modalBackgroundHeight, width: '100%' }} styleSettings={styleSettings}>
+                            <StyledWindowBackground 
+                                ref={modalBackgroundRef} 
+                                className="ftrst window-background"
+                                style={{ height: windowDetails.maximize ? `calc(100% - ${titleBarRef.current?.offsetHeight || 0}px)` : modalBackgroundHeight, width: windowDetails.maximize ? `calc(100% - ${styleSettings?.borders?.width ? parseFloat(styleSettings.borders.width) * 2 : 0.5}px)` : '100%' }} 
+                                styleSettings={styleSettings}
+                            >
                                 <div className="message-container" style={{width: '100%', height: '100%'}} ref={innerBodyRef}>
                                     {children}
                                 </div>
@@ -163,8 +165,7 @@ const handleResizeStop = (e, direction, ref, delta, position) => {
                 </Draggable>
             </>
         ):
-        <>
-        </>
+        <></>
     );
 };
 

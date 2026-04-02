@@ -25,8 +25,7 @@ const StyledButton = styled.button`
   ${props => props.value}
 `;
 
-// Using React.forwardRef with TypeScript generics to define ref and props types
-const Button = React.forwardRef(({ label, action, variant = 'default', style, dataUrl = null, value = null, styleSettings }, ref) => (
+const Button = React.forwardRef(({ label, action, variant = 'default', style, dataUrl = null, value = null, styleSettings, className }, ref) => (
   <StyledButton
     onClick={action}
     ref={ref}
@@ -34,7 +33,7 @@ const Button = React.forwardRef(({ label, action, variant = 'default', style, da
     additionalStyles={style}
     data-url={dataUrl}
     value={value}
-    className={`futurist-${variant !== 'default' ? `${variant}-`: ''}button`}
+    className={`ftrst button ${variant !== 'default' ? `${variant}-` : ''}${className || ''}`}
     styleSettings={styleSettings}
   >
     {label}

@@ -16,14 +16,14 @@ const StyledInput = styled.input`
     ${props => props.additionalStyles}
 `;
 
-const Input = React.forwardRef(({ value, action, variant = 'default', name = null, placeholder = null, style, styleSettings }, ref) => (
+const Input = React.forwardRef(({ value, action, variant = 'default', name = null, placeholder = null, style, styleSettings, className }, ref) => (
     <StyledInput
         onChange={action}
         ref={ref}
         name={name}
         value={value}
         placeholder={placeholder}
-        className={`futurist-${variant !== 'default' ? `${variant}-`: ''}button`}
+        className={`ftrst input ${variant !== 'default' ? `${variant}-` : ''}${className || ''}`}
         additionalStyles={style}
         styleSettings={styleSettings}
     />

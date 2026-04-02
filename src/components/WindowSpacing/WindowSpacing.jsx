@@ -13,10 +13,10 @@ const StyledWindowSpacing = styled.div`
     ${props => props.additionalStyles}
 `;
 
-const WindowSpacing = React.forwardRef(({ value, children, variant = 'default', style, styleSettings }, ref) => (
+const WindowSpacing = React.forwardRef(({ value, children, variant = 'default', style, styleSettings, className }, ref) => (
     <StyledWindowSpacing
         ref={ref}
-        className={`futurist-${variant !== 'default' ? `${variant}-`: ''}window-spacing`}
+        className={`ftrst window-spacing ${variant !== 'default' ? `${variant}-` : ''}${className || ''}`}
         additionalStyles={style}
         styleSettings={styleSettings}
     >
