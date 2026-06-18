@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import { useStyleSettings } from '../../hooks/useStyleSettings';
 
 const variants = (settings) => ({
   default: css`
@@ -10,18 +11,9 @@ const variants = (settings) => ({
     color: #1e1e2e;
     background-color: ${settings?.window?.borderColor || '#89b4fa'};
   `,
-  success: css`
-    color: #1e1e2e;
-    background-color: #a6e3a1;
-  `,
-  warning: css`
-    color: #1e1e2e;
-    background-color: #f9e2af;
-  `,
-  danger: css`
-    color: #1e1e2e;
-    background-color: #f38ba8;
-  `,
+  success: css` color: #1e1e2e; background-color: #a6e3a1; `,
+  warning: css` color: #1e1e2e; background-color: #f9e2af; `,
+  danger: css` color: #1e1e2e; background-color: #f38ba8; `,
 });
 
 const StyledBadge = styled.span`
@@ -36,12 +28,10 @@ const StyledBadge = styled.span`
   white-space: nowrap;
 `;
 
-const Badge = React.forwardRef(({ label, variant = 'default', style, styleSettings }, ref) => (
-  <StyledBadge ref={ref} $v={variant} $s={styleSettings} style={style} className="futurist-badge">
-    {label}
-  </StyledBadge>
-));
+const Badge = React.forwardRef(({ label, variant = 'default', style, styleSettings }, ref) => {
+  const s = useStyleSettings(styleSettings);
+  return <StyledBadge ref={ref} $v={variant} $s={s} style={style} className="futurist-badge">{label}</StyledBadge>;
+});
 
 Badge.displayName = 'Badge';
-
 export default Badge;

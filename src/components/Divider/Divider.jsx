@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useStyleSettings } from '../../hooks/useStyleSettings';
 
 const StyledDivider = styled.hr`
   border: none;
@@ -9,10 +10,10 @@ const StyledDivider = styled.hr`
   opacity: 0.3;
 `;
 
-const Divider = React.forwardRef(({ style, styleSettings }, ref) => (
-  <StyledDivider ref={ref} $s={styleSettings} style={style} className="futurist-divider" />
-));
+const Divider = React.forwardRef(({ style, styleSettings }, ref) => {
+  const s = useStyleSettings(styleSettings);
+  return <StyledDivider ref={ref} $s={s} style={style} className="futurist-divider" />;
+});
 
 Divider.displayName = 'Divider';
-
 export default Divider;

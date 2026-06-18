@@ -1,5 +1,6 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
+import { useStyleSettings } from '../../hooks/useStyleSettings';
 
 const StyledWindowTitle = styled.h4`
   margin: 0 0 0.5em 0;
@@ -10,12 +11,10 @@ const StyledWindowTitle = styled.h4`
   font-weight: 600;
 `;
 
-const WindowTitle = React.forwardRef(({ value, style, styleSettings }, ref) => (
-  <StyledWindowTitle ref={ref} $s={styleSettings} style={style} className="futurist-window-title">
-    {value}
-  </StyledWindowTitle>
-));
+const WindowTitle = React.forwardRef(({ value, style, styleSettings }, ref) => {
+  const s = useStyleSettings(styleSettings);
+  return <StyledWindowTitle ref={ref} $s={s} style={style} className="futurist-window-title">{value}</StyledWindowTitle>;
+});
 
 WindowTitle.displayName = 'WindowTitle';
-
 export default WindowTitle;

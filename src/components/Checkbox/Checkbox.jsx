@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useStyleSettings } from '../../hooks/useStyleSettings';
 
 const Label = styled.label`
   display: inline-flex;
@@ -37,14 +38,16 @@ const StyledCheckbox = styled.span`
   }
 `;
 
-const Checkbox = React.forwardRef(({ checked, action, label, style, styleSettings }, ref) => (
-  <Label $s={styleSettings} style={style}>
-    <HiddenCheckbox ref={ref} checked={checked} onChange={action} />
-    <StyledCheckbox $checked={checked} $s={styleSettings} aria-hidden="true" />
-    {label}
-  </Label>
-));
+const Checkbox = React.forwardRef(({ checked, action, label, style, styleSettings }, ref) => {
+  const s = useStyleSettings(styleSettings);
+  return (
+    <Label $s={s} style={style}>
+      <HiddenCheckbox ref={ref} checked={checked} onChange={action} />
+      <StyledCheckbox $checked={checked} $s={s} aria-hidden="true" />
+      {label}
+    </Label>
+  );
+});
 
 Checkbox.displayName = 'Checkbox';
-
 export default Checkbox;

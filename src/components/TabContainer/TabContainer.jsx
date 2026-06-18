@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import Tab from '../Tab/Tab';
+import { useStyleSettings } from '../../hooks/useStyleSettings';
 
 const StyledTabs = styled.div`
   display: flex;
@@ -20,23 +21,17 @@ const StyledTabContainer = styled.div`
 
 const TabContainer = ({ tabComponents, style, styleSettings }) => {
   const [activeTab, setActiveTab] = useState(Object.keys(tabComponents)[0]);
-
+  const s = useStyleSettings(styleSettings);
   const ActiveComponent = tabComponents[activeTab];
 
   return (
     <>
-      <StyledTabs $s={styleSettings}>
+      <StyledTabs $s={s}>
         {Object.keys(tabComponents).map(tabName => (
-          <Tab
-            key={tabName}
-            label={tabName}
-            action={() => setActiveTab(tabName)}
-            selected={activeTab === tabName}
-            styleSettings={styleSettings}
-          />
+          <Tab key={tabName} label={tabName} action={() => setActiveTab(tabName)} selected={activeTab === tabName} styleSettings={s} />
         ))}
       </StyledTabs>
-      <StyledTabContainer additionalStyle={style} $s={styleSettings}>
+      <StyledTabContainer additionalStyle={style} $s={s}>
         {ActiveComponent ? <ActiveComponent /> : null}
       </StyledTabContainer>
     </>

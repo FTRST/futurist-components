@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useStyleSettings } from '../../hooks/useStyleSettings';
 
 const StyledTextarea = styled.textarea`
   color: ${({ $s }) => $s?.titleBar?.textColor || '#cdd6f4'};
@@ -15,27 +16,14 @@ const StyledTextarea = styled.textarea`
   resize: vertical;
   min-height: 4em;
   transition: border-color 0.15s;
-  &:focus {
-    border-color: ${({ $s }) => $s?.titleBar?.textColor || '#cdd6f4'};
-  }
-  &::placeholder {
-    opacity: 0.4;
-  }
+  &:focus { border-color: ${({ $s }) => $s?.titleBar?.textColor || '#cdd6f4'}; }
+  &::placeholder { opacity: 0.4; }
 `;
 
-const Textarea = React.forwardRef(({ value, action, placeholder, rows, style, styleSettings }, ref) => (
-  <StyledTextarea
-    ref={ref}
-    value={value}
-    onChange={action}
-    placeholder={placeholder}
-    rows={rows}
-    $s={styleSettings}
-    style={style}
-    className="futurist-textarea"
-  />
-));
+const Textarea = React.forwardRef(({ value, action, placeholder, rows, style, styleSettings }, ref) => {
+  const s = useStyleSettings(styleSettings);
+  return <StyledTextarea ref={ref} value={value} onChange={action} placeholder={placeholder} rows={rows} $s={s} style={style} className="futurist-textarea" />;
+});
 
 Textarea.displayName = 'Textarea';
-
 export default Textarea;

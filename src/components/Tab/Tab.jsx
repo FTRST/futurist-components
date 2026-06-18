@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import { useStyleSettings } from '../../hooks/useStyleSettings';
 
 const tabStyles = (settings) => ({
   default: css`
@@ -30,19 +31,14 @@ const StyledTab = styled.button`
   &:hover { opacity: 0.85; }
 `;
 
-const Tab = React.forwardRef(({ label, action, selected, variant = 'default', style, styleSettings }, ref) => (
-  <StyledTab
-    onClick={action}
-    ref={ref}
-    $selected={selected}
-    $s={styleSettings}
-    className={selected ? 'futurist-tab-selected' : 'futurist-tab'}
-    additionalStyles={style}
-  >
-    {label}
-  </StyledTab>
-));
+const Tab = React.forwardRef(({ label, action, selected, variant = 'default', style, styleSettings }, ref) => {
+  const s = useStyleSettings(styleSettings);
+  return (
+    <StyledTab onClick={action} ref={ref} $selected={selected} $s={s} className={selected ? 'futurist-tab-selected' : 'futurist-tab'} additionalStyles={style}>
+      {label}
+    </StyledTab>
+  );
+});
 
 Tab.displayName = 'Tab';
-
 export default Tab;

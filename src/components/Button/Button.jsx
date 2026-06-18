@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import { useStyleSettings } from '../../hooks/useStyleSettings';
 
 const buttonVariants = (settings) => ({
   default: css`
@@ -33,21 +34,14 @@ const StyledButton = styled.button`
   &:disabled { opacity: 0.4; cursor: default; }
 `;
 
-const Button = React.forwardRef(({ label, action, variant = 'default', style, disabled, type, styleSettings }, ref) => (
-  <StyledButton
-    onClick={action}
-    ref={ref}
-    $v={variant}
-    $s={styleSettings}
-    disabled={disabled}
-    type={type}
-    className="futurist-button"
-    additionalStyles={style}
-  >
-    {label}
-  </StyledButton>
-));
+const Button = React.forwardRef(({ label, action, variant = 'default', style, disabled, type, styleSettings }, ref) => {
+  const s = useStyleSettings(styleSettings);
+  return (
+    <StyledButton onClick={action} ref={ref} $v={variant} $s={s} disabled={disabled} type={type} className="futurist-button" additionalStyles={style}>
+      {label}
+    </StyledButton>
+  );
+});
 
 Button.displayName = 'Button';
-
 export default Button;

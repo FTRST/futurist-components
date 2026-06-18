@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import { useStyleSettings } from '../../hooks/useStyleSettings';
 
 const titleBarStyle = (settings) => css`
   display: flex;
@@ -52,49 +53,20 @@ const StyledMinimizeButton = styled.button`
   background-color: ${props => props.$s?.button?.primaryBg || '#45475a'};
 `;
 
-const TitleBar = React.forwardRef(({ title, expandAction, closeAction, minimizeAction, style, maximize = false, styleSettings }, ref) => (
-  <StyledTitleBar
-    className="modal-title-bar"
-    ref={ref}
-    $as={style}
-    $s={styleSettings}
-  >
-    {!maximize ? (
-      <StyledMaximizeButton
-        className="modal-maximize"
-        onClick={expandAction}
-        onTouchStart={expandAction}
-        $s={styleSettings}
-        title="Maximize"
-      >
-        ⛶
-      </StyledMaximizeButton>
-    ) : (
-      <StyledMinimizeButton
-        className="modal-maximize"
-        onClick={minimizeAction}
-        onTouchStart={minimizeAction}
-        $s={styleSettings}
-        title="Minimize"
-      >
-        ⤡
-      </StyledMinimizeButton>
-    )}
-    <StyledTitle className="modal-title">
-      {title}
-    </StyledTitle>
-    <StyledCloseButton
-      className="modal-close"
-      onClick={closeAction}
-      onTouchStart={closeAction}
-      $s={styleSettings}
-      title="Close"
-    >
-      ✕
-    </StyledCloseButton>
-  </StyledTitleBar>
-));
+const TitleBar = React.forwardRef(({ title, expandAction, closeAction, minimizeAction, style, maximize = false, styleSettings }, ref) => {
+  const s = useStyleSettings(styleSettings);
+  return (
+    <StyledTitleBar className="modal-title-bar" ref={ref} $as={style} $s={s}>
+      {!maximize ? (
+        <StyledMaximizeButton className="modal-maximize" onClick={expandAction} onTouchStart={expandAction} $s={s} title="Maximize">⛶</StyledMaximizeButton>
+      ) : (
+        <StyledMinimizeButton className="modal-maximize" onClick={minimizeAction} onTouchStart={minimizeAction} $s={s} title="Minimize">⤡</StyledMinimizeButton>
+      )}
+      <StyledTitle className="modal-title">{title}</StyledTitle>
+      <StyledCloseButton className="modal-close" onClick={closeAction} onTouchStart={closeAction} $s={s} title="Close">✕</StyledCloseButton>
+    </StyledTitleBar>
+  );
+});
 
 TitleBar.displayName = 'TitleBar';
-
 export default TitleBar;

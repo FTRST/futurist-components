@@ -1,9 +1,8 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
+import { useStyleSettings } from '../../hooks/useStyleSettings';
 
-const spin = keyframes`
-  to { transform: rotate(360deg); }
-`;
+const spin = keyframes`to { transform: rotate(360deg); }`;
 
 const StyledSpinner = styled.span`
   display: inline-block;
@@ -17,10 +16,10 @@ const StyledSpinner = styled.span`
   vertical-align: middle;
 `;
 
-const Spinner = React.forwardRef(({ size, style, styleSettings }, ref) => (
-  <StyledSpinner ref={ref} $s={styleSettings} $size={size} style={style} className="futurist-spinner" />
-));
+const Spinner = React.forwardRef(({ size, style, styleSettings }, ref) => {
+  const s = useStyleSettings(styleSettings);
+  return <StyledSpinner ref={ref} $s={s} $size={size} style={style} className="futurist-spinner" />;
+});
 
 Spinner.displayName = 'Spinner';
-
 export default Spinner;

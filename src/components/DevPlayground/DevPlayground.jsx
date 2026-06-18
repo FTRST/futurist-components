@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from 'react';
-import { useSetAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import { useDeviceDetail } from '../../states/deviceDetail';
 import { windowManipulatorAtom } from '../../states/deviceDetailState';
 import BaseWindow from '../BaseWindow/BaseWindow';
@@ -16,42 +16,7 @@ import Toggle from '../Toggle/Toggle';
 import WindowContent from '../WindowContent/WindowContent';
 import WindowTitle from '../WindowTitle/WindowTitle';
 import { openWindow } from '../../utils/windowControls';
-
-// ─── Theme Presets ───────────────────────────────────────────────────────────
-const PRESETS = {
-  retro: {
-    window: { backgroundColor: '#02111B', borderColor: '#6BF178' },
-    titleBar: { backgroundColor: '#02111b', textColor: '#6bf178' },
-    dimensions: { minWidth: 200, minHeight: 200 },
-    spacing: { padding: '.5em', margin: '0' },
-    borders: { width: '.25em', style: 'double' },
-    button: { primaryText: '#6BF178', primaryBg: '#02111B' },
-  },
-  modern: {
-    window: { backgroundColor: '#1e1e2e', borderColor: '#89b4fa' },
-    titleBar: { backgroundColor: '#181825', textColor: '#cdd6f4' },
-    dimensions: { minWidth: 200, minHeight: 150 },
-    spacing: { padding: '.75em', margin: '0' },
-    borders: { width: '1px', style: 'solid' },
-    button: { primaryText: '#cdd6f4', primaryBg: '#45475a' },
-  },
-  light: {
-    window: { backgroundColor: '#ffffff', borderColor: '#dce0e8' },
-    titleBar: { backgroundColor: '#f5f5f5', textColor: '#4c4f69' },
-    dimensions: { minWidth: 200, minHeight: 150 },
-    spacing: { padding: '.75em', margin: '0' },
-    borders: { width: '1px', style: 'solid' },
-    button: { primaryText: '#4c4f69', primaryBg: '#e6e9ef' },
-  },
-  warm: {
-    window: { backgroundColor: '#2d1b12', borderColor: '#e8a87c' },
-    titleBar: { backgroundColor: '#3d2b22', textColor: '#f5d5b5' },
-    dimensions: { minWidth: 200, minHeight: 150 },
-    spacing: { padding: '.75em', margin: '0' },
-    borders: { width: '2px', style: 'solid' },
-    button: { primaryText: '#f5d5b5', primaryBg: '#5d3b32' },
-  },
-};
+import { themeAtom, updateThemeAtom, themes } from '../../states/themeState';
 
 // ─── Quick-start window templates ────────────────────────────────────────────
 const WINDOW_TEMPLATES = [
@@ -69,7 +34,8 @@ export default function DevPlayground() {
   const device = useDeviceDetail();
   const manipulateWindows = useSetAtom(windowManipulatorAtom);
 
-  const [styleSettings, setStyleSettings] = useState(() => structuredClone(PRESETS.modern));
+  const [styleSettings, setStyleSettings] = useAtom(themeAtom);
+  const setAtomTheme = useSetAtom(updateThemeAtom);
   const [activePreset, setActivePreset] = useState('modern');
   const [showTheme, setShowTheme] = useState(true);
   const [showDebug, setShowDebug] = useState(false);
@@ -85,7 +51,7 @@ export default function DevPlayground() {
 
   // ── apply a preset ─────────────────────────────────────────────────────────
   const applyPreset = useCallback((name) => {
-    setStyleSettings(structuredClone(PRESETS[name]));
+    setStyleSettings(themes[name]);
     setActivePreset(name);
   }, []);
 
@@ -101,11 +67,8 @@ export default function DevPlayground() {
 
   // ── theme change helpers ────────────────────────────────────────────────────
   const setStyle = useCallback((category, property, value) => {
-    setStyleSettings(prev => ({
-      ...prev,
-      [category]: { ...prev[category], [property]: value },
-    }));
-  }, []);
+    setAtomTheme({ [category]: { [property]: value } });
+  }, [setAtomTheme]);
 
   // ── clear all windows ──────────────────────────────────────────────────────
   const clearWindows = useCallback(() => {
@@ -149,30 +112,20 @@ export default function DevPlayground() {
 
   // ── import theme from pasted JSON ───────────────────────────────────────────
   const importTheme = useCallback(() => {
-    try {
-      const parsed = JSON.parse(importValue);
-      // Validate structure — must have at least some expected keys
-      if (!parsed.window || !parsed.titleBar || !parsed.borders || !parsed.button || !parsed.spacing || !parsed.dimensions) {
-        alert('Invalid theme: missing required sections (window, titleBar, borders, button, spacing, dimensions)');
-        return;
-      }
-      setStyleSettings(prev => {
-        // Deep merge: keep any fields the imported theme doesn't specify
-        const merged = { ...prev };
-        for (const section of ['window', 'titleBar', 'dimensions', 'spacing', 'borders', 'button']) {
-          if (parsed[section]) {
-            merged[section] = { ...prev[section], ...parsed[section] };
-          }
+      try {
+        const parsed = JSON.parse(importValue);
+        if (!parsed.window || !parsed.titleBar || !parsed.borders || !parsed.button || !parsed.spacing || !parsed.dimensions) {
+          alert('Invalid theme: missing required sections (window, titleBar, borders, button, spacing, dimensions)');
+          return;
         }
-        return merged;
-      });
-      setActivePreset(null);
-      setShowImport(false);
-      setImportValue('');
-    } catch (e) {
-      alert('Invalid JSON: ' + e.message);
-    }
-  }, [importValue, setStyleSettings]);
+        setAtomTheme(parsed);
+        setActivePreset(null);
+        setShowImport(false);
+        setImportValue('');
+      } catch (e) {
+        alert('Invalid JSON: ' + e.message);
+      }
+    }, [importValue, setAtomTheme]);
 
   // ── render demo content per window type ─────────────────────────────────────
   const renderWindowContent = (w, ctx) => {
@@ -314,7 +267,7 @@ export default function DevPlayground() {
 
         {/* Theme presets */}
         <div style={{ display: 'flex', gap: '0.25em', marginLeft: '1em' }}>
-          {Object.keys(PRESETS).map(name => (
+          {Object.keys(themes).map(name => (
             <button
               key={name}
               onClick={() => applyPreset(name)}

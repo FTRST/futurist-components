@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useStyleSettings } from '../../hooks/useStyleSettings';
 
 const StyledSelect = styled.select`
   color: ${({ $s }) => $s?.titleBar?.textColor || '#cdd6f4'};
@@ -13,29 +14,18 @@ const StyledSelect = styled.select`
   width: 100%;
   cursor: pointer;
   transition: border-color 0.15s;
-  &:focus {
-    border-color: ${({ $s }) => $s?.titleBar?.textColor || '#cdd6f4'};
-  }
+  &:focus { border-color: ${({ $s }) => $s?.titleBar?.textColor || '#cdd6f4'}; }
 `;
 
-const Select = React.forwardRef(({ value, action, options, placeholder, style, styleSettings }, ref) => (
-  <StyledSelect
-    ref={ref}
-    value={value}
-    onChange={action}
-    $s={styleSettings}
-    style={style}
-    className="futurist-select"
-  >
-    {placeholder && <option value="">{placeholder}</option>}
-    {options?.map(opt => (
-      <option key={opt.value} value={opt.value}>
-        {opt.label}
-      </option>
-    ))}
-  </StyledSelect>
-));
+const Select = React.forwardRef(({ value, action, options, placeholder, style, styleSettings }, ref) => {
+  const s = useStyleSettings(styleSettings);
+  return (
+    <StyledSelect ref={ref} value={value} onChange={action} $s={s} style={style} className="futurist-select">
+      {placeholder && <option value="">{placeholder}</option>}
+      {options?.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+    </StyledSelect>
+  );
+});
 
 Select.displayName = 'Select';
-
 export default Select;

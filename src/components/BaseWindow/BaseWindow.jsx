@@ -6,6 +6,7 @@ import TitleBar from '../TitleBar/TitleBar';
 import WindowContent from '../WindowContent/WindowContent';
 import styled, { css } from 'styled-components';
 import { closeWindow, bringToFront, resizeWindow } from '../../utils/windowControls';
+import { useStyleSettings } from '../../hooks/useStyleSettings';
 
 const StyleSettingsContext = createContext();
 
@@ -33,6 +34,7 @@ const BaseWindow = ({
     
     const windowDetails = device.windows.find(w => w.id === id);
     const titleBarRef = useRef(null);
+    const s = useStyleSettings(styleSettings);
 
     const [dragPosition, setDragPosition] = useState(() => {
         if (windowDetails?.top && windowDetails?.left) {
@@ -121,7 +123,7 @@ const handleResizeStop = (e, direction, ref, delta, position) => {
                         <Resizable
                             size={{ width: windowDetails.width, height: windowDetails.height }}
                             onResizeStop={handleResizeStop}
-                            minConstraints={[styleSettings?.dimensions?.minWidth || 200, styleSettings?.dimensions?.minHeight || 200]}
+                            minConstraints={[s?.dimensions?.minWidth || 200, s?.dimensions?.minHeight || 200]}
                             maxConstraints={[device.deskSpace.width, device.deskSpace.height]}
                         >
                             <TitleBar 
@@ -147,9 +149,9 @@ const handleResizeStop = (e, direction, ref, delta, position) => {
                                     });
                                 }}
                                 maximize={windowDetails.maximize}
-                                styleSettings={styleSettings}
+                                styleSettings={s}
                             />
-                            <WindowContent styleSettings={styleSettings} style={contentStyle}>
+                            <WindowContent styleSettings={s} style={contentStyle}>
                                 {children}
                             </WindowContent>
                         </Resizable>

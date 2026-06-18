@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useStyleSettings } from '../../hooks/useStyleSettings';
 
 const Label = styled.label`
   display: inline-flex;
@@ -39,16 +40,16 @@ const Thumb = styled.span`
   transition: left 0.2s;
 `;
 
-const Toggle = React.forwardRef(({ checked, action, label, style, styleSettings }, ref) => (
-  <Label $s={styleSettings} style={style}>
-    <HiddenInput ref={ref} checked={checked} onChange={action} />
-    <Track $checked={checked} $s={styleSettings} aria-hidden="true">
-      <Thumb $checked={checked} $s={styleSettings} />
-    </Track>
-    {label}
-  </Label>
-));
+const Toggle = React.forwardRef(({ checked, action, label, style, styleSettings }, ref) => {
+  const s = useStyleSettings(styleSettings);
+  return (
+    <Label $s={s} style={style}>
+      <HiddenInput ref={ref} checked={checked} onChange={action} />
+      <Track $checked={checked} $s={s} aria-hidden="true"><Thumb $checked={checked} $s={s} /></Track>
+      {label}
+    </Label>
+  );
+});
 
 Toggle.displayName = 'Toggle';
-
 export default Toggle;

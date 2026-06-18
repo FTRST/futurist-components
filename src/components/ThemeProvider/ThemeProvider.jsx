@@ -1,45 +1,47 @@
-import React, { createContext, useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { themeAtom, updateThemeAtom, resetThemeAtom, loadSavedTheme } from '../../states/themeState';
+import { themeAtom, updateThemeAtom, resetThemeAtom, loadSavedTheme, MODERN_THEME } from '../../states/themeState';
+import { StyleSettingsContext } from '../../contexts/StyleSettingsContext';
 
-const ThemeContext = createContext(null);
+export { MODERN_THEME as defaultTheme };
+export { useStyleSettings as useTheme } from '../../hooks/useStyleSettings';
 
+/**
+ * Provides the current theme from Jotai state via React context.
+ * Wrap this at the top of your dashboard / app:
+ *
+ *   <ThemeProvider>
+ *     <App />
+ *   </ThemeProvider>
+ *
+ * All futurist-components automatically read from this context
+ * when no explicit styleSettings prop is passed.
+ */
 export const ThemeProvider = ({ children }) => {
   const theme = useAtomValue(themeAtom);
-  
+
+  // Restore saved theme on mount, if any
+  const updateTheme = useSetAtom(updateThemeAtom);
   useEffect(() => {
-    const savedTheme = loadSavedTheme();
-    if (savedTheme) {
-      localStorage.setItem('ftrst-theme', JSON.stringify(savedTheme));
+    const saved = loadSavedTheme();
+    if (saved) {
+      // Merge saved over the default so new keys aren't lost
+      updateTheme(saved);
     }
   }, []);
 
   return (
-    <ThemeContext.Provider value={theme}>
+    <StyleSettingsContext.Provider value={theme}>
       {children}
-    </ThemeContext.Provider>
+    </StyleSettingsContext.Provider>
   );
 };
 
-export const useTheme = () => {
-  const context = useContext(ThemeContext);
-  if (!context) {
-    throw new Error('useTheme must be used within a ThemeProvider');
-  }
-  return context;
-};
-
-export const useUpdateTheme = () => {
-  return useSetAtom(updateThemeAtom);
-};
-
+export const useUpdateTheme = () => useSetAtom(updateThemeAtom);
 export const useResetTheme = () => {
-  const resetTheme = useSetAtom(resetThemeAtom);
-  
-  const handleReset = () => {
+  const reset = useSetAtom(resetThemeAtom);
+  return () => {
     localStorage.removeItem('ftrst-theme');
-    resetTheme();
+    reset();
   };
-
-  return handleReset;
 };
