@@ -1,2 +1,15 @@
 export { default as useDeviceDetail } from './deviceDetail';
-export { default as deviceDetailState } from './deviceDetailState';
+export { 
+  deviceDetailAtom,
+  getWindowAtom, 
+  desktopResizingAtom,
+  windowManipulatorAtom 
+} from './deviceDetailState';
+export { 
+  themeAtom, 
+  updateThemeAtom, 
+  resetThemeAtom,
+  loadThemeAtom,
+  saveTheme, 
+  loadSavedTheme 
+} from './themeState';

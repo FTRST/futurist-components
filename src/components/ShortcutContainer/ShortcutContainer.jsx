@@ -2,10 +2,9 @@ import React from 'react';
 import Shortcut from '../Shortcut/Shortcut';
 import { openWindow } from '../../utils/windowControls';
 
-const ShortcutContainer = ({ device, shortcuts, manipulateWindows, styleSettings }) => {
-  console.log(device);
+const ShortcutContainer = ({ device, shortcuts, manipulateWindows, styleSettings, className }) => {
   return (
-    <>
+    <div className={`ftrst shortcut-container ${className || ''}`}>
       {shortcuts.map((shortcut, index) => (
         <Shortcut
           key={index}
@@ -16,7 +15,7 @@ const ShortcutContainer = ({ device, shortcuts, manipulateWindows, styleSettings
           styleSettings={styleSettings}
         />
       ))}
-    </>
+    </div>
   );
 };
 
