@@ -1,61 +1,46 @@
-// src/components/TabContainer/TabContainer.jsx
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
-import Tab from '../Tab/Tab';  // Ensure this path is correct
-
-const tabs = {
-    default: css`
-        display: flex;
-    `
-};
+import Tab from '../Tab/Tab';
 
 const StyledTabs = styled.div`
-  ${props => tabs[props.variant || 'default']}
+  display: flex;
+  gap: 0.25em;
+  padding: 0.25em 0.25em 0 0.25em;
+  background: ${props => props.$s?.titleBar?.backgroundColor || '#181825'};
+  border-bottom: 1px solid ${props => props.$s?.window?.borderColor || '#89b4fa'};
 `;
 
-const tabContainer = (settings) => ({
-    default: css`
-        display: grid;
-        border: ${settings?.borders?.style || 'solid'} ${settings?.borders?.width || '.15em'} ${settings?.window?.borderColor || '#6bf178'};
-        padding: ${settings?.spacing?.padding || '.5em'};
-        background-color: #6bf178;
-        box-shadow: ${settings?.spacing?.margin || '.25em'} ${settings?.spacing?.margin || '.25em'} ${settings?.button?.primaryBg || '#02111B'};
-        color: ${settings?.titleBar?.textColor || '#6BF178'};
-    `
-});
-
 const StyledTabContainer = styled.div`
-  ${props => tabContainer(props.styleSettings)[props.variant || 'default']}
-  ${props => props.additionalStyle}
+  border: 1px solid ${props => props.$s?.window?.borderColor || '#89b4fa'};
+  border-top: none;
+  padding: ${props => props.$s?.spacing?.padding || '.75em'};
+  background-color: ${props => props.$s?.window?.backgroundColor || '#1e1e2e'};
+  color: ${props => props.$s?.titleBar?.textColor || '#cdd6f4'};
 `;
 
 const TabContainer = ({ tabComponents, style, styleSettings }) => {
-    const [activeTab, setActiveTab] = useState(Object.keys(tabComponents)[0]); // Default to the first tab
+  const [activeTab, setActiveTab] = useState(Object.keys(tabComponents)[0]);
 
-    const handleTabClick = (tabName) => {
-        setActiveTab(tabName);
-    };
+  const ActiveComponent = tabComponents[activeTab];
 
-    const ActiveComponent = tabComponents[activeTab];
-
-    return (
-        <>
-            <StyledTabs>
-                {Object.keys(tabComponents).map(tabName => (
-                    <Tab
-                        key={tabName}
-                        label={tabName}
-                        action={() => handleTabClick(tabName)}
-                        selected={activeTab === tabName}
-                        styleSettings={styleSettings}
-                    />
-                ))}
-            </StyledTabs>
-            <StyledTabContainer additionalStyle={style} styleSettings={styleSettings}>
-                {ActiveComponent ? <ActiveComponent /> : null}
-            </StyledTabContainer>
-        </>
-    );
+  return (
+    <>
+      <StyledTabs $s={styleSettings}>
+        {Object.keys(tabComponents).map(tabName => (
+          <Tab
+            key={tabName}
+            label={tabName}
+            action={() => setActiveTab(tabName)}
+            selected={activeTab === tabName}
+            styleSettings={styleSettings}
+          />
+        ))}
+      </StyledTabs>
+      <StyledTabContainer additionalStyle={style} $s={styleSettings}>
+        {ActiveComponent ? <ActiveComponent /> : null}
+      </StyledTabContainer>
+    </>
+  );
 };
 
 export default TabContainer;

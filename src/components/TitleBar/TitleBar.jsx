@@ -1,135 +1,100 @@
-// src/components/TitleBar/TitleBar.jsx
 import React from 'react';
 import styled, { css } from 'styled-components';
 
 const titleBarStyle = (settings) => css`
   display: flex;
-  background-color: ${settings?.titleBar?.backgroundColor || '#02111b'};
-  color: ${settings?.titleBar?.textColor || '#6bf178'};
-  border-bottom: ${settings?.borders?.style || 'double'} ${settings?.borders?.width || '0.1em'} ${settings?.window?.borderColor || '#6bf178'};
+  background-color: ${settings?.titleBar?.backgroundColor || '#181825'};
+  color: ${settings?.titleBar?.textColor || '#cdd6f4'};
+  border-bottom: ${settings?.borders?.style || 'solid'} ${settings?.borders?.width || '1px'} ${settings?.window?.borderColor || '#89b4fa'};
 `;
 
 const StyledTitleBar = styled.strong`
-  ${props => titleBarStyle(props.styleSettings)}
-  ${props => props.additionalStyle}
+  ${props => titleBarStyle(props.$s)}
+  ${props => props.$as}
 `;
-
-const titleTrayStyle = {
-  default: css`
-    max-width: 100%;
-    display: flex;
-  `
-};
-
-const StyledTitleTray = styled.div`
-  ${props => titleTrayStyle[props.variant || 'default']}
-`;
-
-const titleStyle = {
-  default: css`
-    width: 100%;
-    margin: auto;
-    padding: 0.75em;
-  `
-};
 
 const StyledTitle = styled.div`
-  ${props => titleStyle[props.variant || 'default']}
+  width: 100%;
+  margin: auto;
+  padding: 0.5em 0.75em;
+  font-size: 0.9em;
 `;
 
-const closeButtonStyle = (settings) => css`
-  margin: auto;
+const btnBase = (settings) => css`
+  margin: 0.3em;
   z-index: 999999;
-  margin-right: 1vh;
-  color: ${settings?.button?.primaryBg || '#02111B'};
-  background-color: ${settings?.window?.borderColor || '#F50000'};
-  border: outset ${settings?.borders?.width || '.15em'} ${settings?.window?.borderColor || '#6BF178'};
   font-weight: 700;
+  font-size: 0.8em;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0.25em 0.5em;
+  border: ${settings?.borders?.style || 'solid'} ${settings?.borders?.width || '1px'} ${settings?.window?.borderColor || '#89b4fa'};
+  border-radius: 3px;
+  transition: opacity 0.15s;
+  &:hover { opacity: 0.8; }
 `;
 
 const StyledCloseButton = styled.button`
-  ${props => closeButtonStyle(props.styleSettings)}
-`;
-
-const maximizeButtonStyle = (settings) => css`
-  margin: auto;
-  background-color: blue;
-  color: ${settings?.titleBar?.textColor || '#6bf178'};
-  margin-right: 0;
-  margin-left: 1vh;
-  z-index: 999999;
-  border: outset ${settings?.borders?.width || '.15em'} ${settings?.window?.borderColor || '#6bf178'};
-  font-weight: 700;
+  ${props => btnBase(props.$s)}
+  color: ${props => props.$s?.titleBar?.backgroundColor || '#181825'};
+  background-color: ${props => props.$s?.window?.borderColor || '#89b4fa'};
 `;
 
 const StyledMaximizeButton = styled.button`
-  ${props => maximizeButtonStyle(props.styleSettings)}
-`;
-
-const minimizeButtonStyle = (settings) => css`
-  margin: auto;
-  background-color: yellow;
-  color: ${settings?.button?.primaryBg || '#02111b'};
-  margin-right: 0;
-  margin-left: 1vh;
-  z-index: 999999;
-  border: outset ${settings?.borders?.width || '.15em'} ${settings?.window?.borderColor || '#6BF178'};
-  font-weight: 700;
+  ${props => btnBase(props.$s)}
+  color: ${props => props.$s?.titleBar?.textColor || '#cdd6f4'};
+  background-color: ${props => props.$s?.button?.primaryBg || '#45475a'};
 `;
 
 const StyledMinimizeButton = styled.button`
-  ${props => minimizeButtonStyle(props.styleSettings)}
+  ${props => btnBase(props.$s)}
+  color: ${props => props.$s?.titleBar?.textColor || '#cdd6f4'};
+  background-color: ${props => props.$s?.button?.primaryBg || '#45475a'};
 `;
 
-const TitleBar = React.forwardRef(({ title, expandAction, closeAction, minimizeAction, variant = "default", style, maximize = false, styleSettings }, ref) => (
-  <StyledTitleBar prevHeight
+const TitleBar = React.forwardRef(({ title, expandAction, closeAction, minimizeAction, style, maximize = false, styleSettings }, ref) => (
+  <StyledTitleBar
     className="modal-title-bar"
-    ref={ref} 
-    variant={variant}
-    additionalStyle={style}
-    styleSettings={styleSettings}
+    ref={ref}
+    $as={style}
+    $s={styleSettings}
   >
-    {
-      !maximize ? (
-        <>
-          <StyledMaximizeButton 
-            className="modal-maximize"
-            onClick={expandAction} 
-            onTouchStart={expandAction}
-            styleSettings={styleSettings}
-          >
-            O
-          </StyledMaximizeButton>
-        </>
-      )
-      :
-        <>
-          <StyledMinimizeButton 
-            className="modal-maximize"
-            onClick={minimizeAction} 
-            onTouchStart={minimizeAction}
-            styleSettings={styleSettings}
-          >
-            .
-          </StyledMinimizeButton>
-        </>
-    }
-    <StyledTitle
-      className="modal-title"
-    >
+    {!maximize ? (
+      <StyledMaximizeButton
+        className="modal-maximize"
+        onClick={expandAction}
+        onTouchStart={expandAction}
+        $s={styleSettings}
+        title="Maximize"
+      >
+        ⛶
+      </StyledMaximizeButton>
+    ) : (
+      <StyledMinimizeButton
+        className="modal-maximize"
+        onClick={minimizeAction}
+        onTouchStart={minimizeAction}
+        $s={styleSettings}
+        title="Minimize"
+      >
+        ⤡
+      </StyledMinimizeButton>
+    )}
+    <StyledTitle className="modal-title">
       {title}
     </StyledTitle>
-    <StyledTitleTray>
-      <StyledCloseButton
-        className="modal-close"
-        onClick={closeAction}
-        onTouchStart={closeAction}
-        styleSettings={styleSettings}
-      >
-        X
-      </StyledCloseButton>
-    </StyledTitleTray>
+    <StyledCloseButton
+      className="modal-close"
+      onClick={closeAction}
+      onTouchStart={closeAction}
+      $s={styleSettings}
+      title="Close"
+    >
+      ✕
+    </StyledCloseButton>
   </StyledTitleBar>
 ));
+
+TitleBar.displayName = 'TitleBar';
 
 export default TitleBar;

@@ -1,35 +1,21 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 
-const windowTitleStyle = (settings) => ({
-    default: css`
-        margin: auto;
-        text-align: center;
-        background-color: ${settings?.button?.primaryBg || '#02111B'};
-        color: ${settings?.titleBar?.textColor || '#6BF178'};
-        margin-bottom: ${settings?.spacing?.margin || '.5em'};
-        width: 75%;
-        padding: ${settings?.spacing?.padding || '.5em'};
-        margin-top: -2.25em;
-        border: ${settings?.borders?.style || 'double'} ${settings?.borders?.width || '.25em'} ${settings?.window?.borderColor || '#6BF178'};
-        line-height: 1.2;
-    `
-});
-
 const StyledWindowTitle = styled.h4`
-    ${props => windowTitleStyle(props.styleSettings)[props.variant || 'default']}
-    ${props => props.additionalStyles}
+  margin: 0 0 0.5em 0;
+  padding: ${({ $s }) => $s?.spacing?.padding || '.5em'};
+  color: ${({ $s }) => $s?.titleBar?.textColor || '#cdd6f4'};
+  border-bottom: 1px solid ${({ $s }) => $s?.window?.borderColor || '#89b4fa'};
+  font-size: 0.95em;
+  font-weight: 600;
 `;
 
-const WindowTitle = React.forwardRef(({ value, variant = 'default', style, styleSettings }, ref) => (
-    <StyledWindowTitle
-        ref={ref}
-        className={`futurist-${variant !== 'default' ? `${variant}-`: ''}window-title`}
-        additionalStyles={style}
-        styleSettings={styleSettings}
-    >
-        {value}
-    </StyledWindowTitle>
+const WindowTitle = React.forwardRef(({ value, style, styleSettings }, ref) => (
+  <StyledWindowTitle ref={ref} $s={styleSettings} style={style} className="futurist-window-title">
+    {value}
+  </StyledWindowTitle>
 ));
+
+WindowTitle.displayName = 'WindowTitle';
 
 export default WindowTitle;

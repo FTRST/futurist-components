@@ -1,32 +1,46 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 
-const inputStyles = (settings) => ({
-    default: css`
-        text-align: center;
-        color: ${settings?.titleBar?.textColor || '#6bf178'};
-        padding: .5em;
-        background-color: ${settings?.button?.primaryBg || '#02111b'};
-        border: ridge ${settings?.borders?.width || '.25em'} ${settings?.window?.borderColor || '#6bf178'};
-    `
+const inputVariants = (settings) => ({
+  default: css`
+    color: ${settings?.titleBar?.textColor || '#cdd6f4'};
+    background-color: ${settings?.button?.primaryBg || '#45475a'};
+    border: 1px solid ${settings?.window?.borderColor || '#89b4fa'};
+  `,
 });
 
 const StyledInput = styled.input`
-    ${props => inputStyles(props.styleSettings)[props.variant || 'default']}
-    ${props => props.additionalStyles}
+  ${props => inputVariants(props.$s)[props.$v || 'default']}
+  padding: 0.5em 0.75em;
+  border-radius: 4px;
+  font-size: 0.85em;
+  outline: none;
+  box-sizing: border-box;
+  width: 100%;
+  transition: border-color 0.15s;
+  &:focus {
+    border-color: ${props => props.$s?.titleBar?.textColor || '#cdd6f4'};
+  }
+  &::placeholder {
+    opacity: 0.4;
+  }
 `;
 
-const Input = React.forwardRef(({ value, action, variant = 'default', name = null, placeholder = null, style, styleSettings }, ref) => (
-    <StyledInput
-        onChange={action}
-        ref={ref}
-        name={name}
-        value={value}
-        placeholder={placeholder}
-        className={`futurist-${variant !== 'default' ? `${variant}-`: ''}button`}
-        additionalStyles={style}
-        styleSettings={styleSettings}
-    />
+const Input = React.forwardRef(({ value, action, variant = 'default', name, placeholder, style, styleSettings, type = 'text' }, ref) => (
+  <StyledInput
+    onChange={action}
+    ref={ref}
+    name={name}
+    value={value}
+    placeholder={placeholder}
+    type={type}
+    $v={variant}
+    $s={styleSettings}
+    className="futurist-input"
+    additionalStyles={style}
+  />
 ));
+
+Input.displayName = 'Input';
 
 export default Input;

@@ -11,16 +11,16 @@ const windowInsetStyle = (settings) => ({
 });
 
 const StyledWindowInset = styled.div`
-    ${props => windowInsetStyle(props.styleSettings)[props.variant || 'default']}
+    ${props => windowInsetStyle(props.$s)[props.variant || 'default']}
     ${props => props.additionalStyles}
 `;
 
 const WindowInset = React.forwardRef(({ value, children, variant = 'default', style, styleSettings }, ref) => (
     <StyledWindowInset
         ref={ref}
+        $s={styleSettings}
         className={`futurist-${variant !== 'default' ? `${variant}-`: ''}window-inset`}
         additionalStyles={style}
-        styleSettings={styleSettings}
     >
         {value}
         {children}

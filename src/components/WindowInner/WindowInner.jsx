@@ -11,14 +11,14 @@ const windowInnerStyle = (settings) => ({
 });
 
 const StyledWindowInner = styled.div`
-  ${props => windowInnerStyle(props.styleSettings)[props.variant || 'default']}
+  ${props => windowInnerStyle(props.$s)[props.variant || 'default']}
   ${props => props.additionalStyles}
 `;
 
 const WindowInner = React.forwardRef(({ value, children, variant = 'default', style, styleSettings }, ref) => (
     <StyledWindowInner
         ref={ref}
-        className={`futurist-${variant !== 'default' ? `${variant}-`: ''}window-inner`}
+        $s={styleSettings}
         additionalStyles={style}
         styleSettings={styleSettings}
     >

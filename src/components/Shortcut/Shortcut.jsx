@@ -16,8 +16,8 @@ const ShortcutIcon = styled.img`
 `;
 
 const ShortcutName = styled.div`
-    background-color: ${props => props.theme?.titleBar?.textColor || '#6bf178'};
-    color: ${props => props.theme?.button?.primaryBg || '#02111b'};
+    background-color: ${props => props.$theme?.titleBar?.textColor || '#6bf178'};
+    color: ${props => props.$theme?.button?.primaryBg || '#02111b'};
     padding: .25em;
     align-items: center;
     display: grid;
@@ -48,29 +48,34 @@ const Shortcut = ({width, icon, name, action, styleSettings}) => {
         }
     }
 
+    const theme = {
+        titleBar: { textColor: styleSettings?.titleBar?.textColor },
+        button: { primaryBg: styleSettings?.button?.primaryBg },
+    };
+
     return (
         <>
             {
                 width < 600 ? (
                     <>
                         <Draggable onStart={handleDragStart} onStop={handleDragStop}>
-<StyledShortcut onClick={action}>
-                                 <div>
-                                     <ShortcutIcon src={icon}></ShortcutIcon>
-                                 </div>
-                                 <ShortcutName theme={{ titleBar: { textColor: styleSettings?.titleBar?.textColor }, button: { primaryBg: styleSettings?.button?.primaryBg } }}>{name}</ShortcutName>
-                             </StyledShortcut>
+                            <StyledShortcut onClick={action}>
+                                <div>
+                                    <ShortcutIcon src={icon}></ShortcutIcon>
+                                </div>
+                                <ShortcutName $theme={theme}>{name}</ShortcutName>
+                            </StyledShortcut>
                         </Draggable>
                     </>
                 )
                 :
                     <Draggable>
-<StyledShortcut onClick={action}>
-                             <div>
-                                 <ShortcutIcon src={icon}></ShortcutIcon>
-                             </div>
-                             <ShortcutName theme={{ titleBar: { textColor: styleSettings?.titleBar?.textColor }, button: { primaryBg: styleSettings?.button?.primaryBg } }}>{name}</ShortcutName>
-                         </StyledShortcut>
+                        <StyledShortcut onClick={action}>
+                            <div>
+                                <ShortcutIcon src={icon}></ShortcutIcon>
+                            </div>
+                            <ShortcutName $theme={theme}>{name}</ShortcutName>
+                        </StyledShortcut>
                     </Draggable>
             }
         </>

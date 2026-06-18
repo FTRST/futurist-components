@@ -187,6 +187,16 @@
   height: 100%;
 }
 
+/* WindowContent */
+.futurist-window-content,
+.futurist-default-window-content {
+  border: .25em double #6BF178;
+  background-color: #02111B;
+  padding: .75em;
+  color: #6BF178;
+  box-sizing: border-box;
+}
+
 /* Shortcut */
 .futurist-shortcut {
   padding: 1em;

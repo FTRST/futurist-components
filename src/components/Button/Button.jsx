@@ -1,44 +1,53 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 
-const buttonStyles = (settings) => ({
+const buttonVariants = (settings) => ({
   default: css`
-    color: ${settings?.button?.primaryText || '#6BF178'};
-    background-color: ${settings?.button?.primaryBg || '#02111B'};
-    padding: 0.5em;
-    border: outset ${settings?.borders?.width || 'medium'} ${settings?.window?.borderColor || '#6BF178'};
-    outline: solid .1em ${settings?.button?.primaryBg || '#02111B'};
+    color: ${settings?.button?.primaryText || '#cdd6f4'};
+    background-color: ${settings?.button?.primaryBg || '#45475a'};
+    border: 1px solid ${settings?.window?.borderColor || '#89b4fa'};
   `,
-  inverted: css`
-    color: ${settings?.button?.primaryBg || '#02111B'};
-    background-color: ${settings?.button?.primaryText || '#6BF178'};
-    border: outset ${settings?.borders?.width || 'medium'} ${settings?.window?.borderColor || '#6BF178'};
-    padding: .5em;
-    outline: solid .1em ${settings?.button?.primaryBg || '#02111B'};
-  `
+  primary: css`
+    color: ${settings?.button?.primaryBg || '#45475a'};
+    background-color: ${settings?.button?.primaryText || '#cdd6f4'};
+    border: 1px solid ${settings?.button?.primaryText || '#cdd6f4'};
+  `,
+  ghost: css`
+    color: ${settings?.titleBar?.textColor || '#cdd6f4'};
+    background-color: transparent;
+    border: 1px solid transparent;
+    &:hover { background-color: ${settings?.button?.primaryBg || '#45475a'}; }
+  `,
 });
 
 const StyledButton = styled.button`
-  ${props => buttonStyles(props.styleSettings)[props.variant || 'default']}
-  ${props => props.additionalStyles}
-  ${props => props.dataUrl}
-  ${props => props.value}
+  ${props => buttonVariants(props.$s)[props.$v || 'default']}
+  padding: 0.5em 1em;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85em;
+  font-weight: 500;
+  transition: opacity 0.15s, background-color 0.15s;
+  box-sizing: border-box;
+  &:hover { opacity: 0.85; }
+  &:disabled { opacity: 0.4; cursor: default; }
 `;
 
-// Using React.forwardRef with TypeScript generics to define ref and props types
-const Button = React.forwardRef(({ label, action, variant = 'default', style, dataUrl = null, value = null, styleSettings }, ref) => (
+const Button = React.forwardRef(({ label, action, variant = 'default', style, disabled, type, styleSettings }, ref) => (
   <StyledButton
     onClick={action}
     ref={ref}
-    variant={variant}
+    $v={variant}
+    $s={styleSettings}
+    disabled={disabled}
+    type={type}
+    className="futurist-button"
     additionalStyles={style}
-    data-url={dataUrl}
-    value={value}
-    className={`futurist-${variant !== 'default' ? `${variant}-`: ''}button`}
-    styleSettings={styleSettings}
   >
     {label}
   </StyledButton>
 ));
+
+Button.displayName = 'Button';
 
 export default Button;
