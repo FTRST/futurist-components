@@ -153,9 +153,9 @@ Notification/alert box with optional close button.
 
 ### 14. WindowContent (`src/components/WindowContent/WindowContent.jsx`)
 
-A single-wrapper replacement for the deprecated WindowInset → WindowSpacing → WindowInner three-layer ritual.
+The single-wrapper replacement for the deprecated WindowInset → WindowSpacing → WindowInner three-layer ritual. Fully theme-driven via `styleSettings`.
 
-- **Visual effect:** `border: double .25em #6BF178` | `background: #02111B` | `padding: .75em` | `color: #6BF178`
+- **Visual:** Theme-aware border, background (from `window.backgroundColor`), padding (from `spacing.padding`), and text color (from `titleBar.textColor`).
 - Uses transient `$s` prop for theming.
 - Accepts `style` override for per-use customization (used by BaseWindow to strip border/padding).
 - **Props:** `children`, `style`, `styleSettings`
@@ -190,7 +190,7 @@ Desktop shortcut icon with drag-to-click detection.
 
 - Desktop (>600px): Wraps in `react-draggable`.
 - Mobile (≤600px): Only fires click if total drag distance ≤ 10px and duration < 300ms (distinguishes tap from drag).
-- Uses transient `$theme` prop for the name label styling.
+- Uses transient `$s` prop for theming.
 - **Props:** `width`, `icon` (URL), `name`, `action`, `styleSettings`
 
 ---
@@ -350,7 +350,7 @@ const StyledElement = styled.div`
 
 ## Build & Export
 
-- **Entry:** `src/index.jsx` — re-exports all 21 components + utils
+- **Entry:** `src/index.jsx` — re-exports all 34 components + utils + state hooks
 - **Output:** `dist/futurist-components.es.js` (ES module) + `dist/futurist-components.umd.js` (UMD)
 - **Externalized:** `react`, `react-dom`
 - **Total bundle:** ~218 KB ES, ~152 KB UMD
@@ -358,30 +358,52 @@ const StyledElement = styled.div`
 
 ---
 
-## All 21 Components (exported from `src/components/index.jsx`)
+## All 34 Exported Components (from `src/components/index.jsx`)
 
 1. Alert
-2. Badge
-3. BaseWindow
-4. Button
-5. Checkbox
-6. DevPlayground
-7. Divider
-8. Input
-9. Select
-10. Shortcut
-11. ShortcutContainer
-12. Spinner
-13. Tab
-14. TabContainer
-15. Textarea
-16. TitleBar
-17. Toggle
-18. WindowContent
-19. WindowInner *(deprecated)*
-20. WindowInset *(deprecated)*
-21. WindowSpacing *(deprecated)*
-22. WindowTitle
+2. AreaChart
+3. Badge
+4. BarChart
+5. BaseWindow
+6. Button
+7. Card
+8. Checkbox
+9. ComponentShowcase
+10. Customizer
+11. DevPlayground
+12. Divider
+13. HeatmapChart
+14. Input
+15. LineChart
+16. Modal
+17. ProgressBar
+18. Radio
+19. Select
+20. Shortcut
+21. ShortcutContainer
+22. Slider
+23. Sparkline
+24. Spinner
+25. Tab
+26. TabContainer
+27. Textarea
+28. ThemeProvider, useTheme, useUpdateTheme, useResetTheme
+29. TitleBar
+30. Toast
+31. Toggle
+32. WindowContent
+33. WindowInner *(deprecated)*
+34. WindowInset *(deprecated)*
+35. WindowSpacing *(deprecated)*
+36. WindowTitle
+
+Plus these from `src/index.jsx`:
+- StyleSettingsContext
+- useStyleSettings
+- themeAtom, updateThemeAtom, resetThemeAtom, loadThemeAtom
+- defaultTheme, MODERN_THEME, themes
+- saveTheme, loadSavedTheme
+- openWindow, closeWindow, bringToFront, resizeWindow
 
 ---
 

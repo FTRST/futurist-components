@@ -187,7 +187,6 @@ The **DevPlayground** includes Copy/Import buttons in the toolbar:
 | **AreaChart** | Area chart visualization |
 | **BarChart** | Bar chart visualization |
 | **LineChart** | Line chart visualization |
-| **PieChart** | Pie chart visualization |
 | **HeatmapChart** | Heatmap visualization |
 | **Sparkline** | Inline sparkline |
 
@@ -306,7 +305,7 @@ A dedicated view showing **every component** in a scrollable layout with live in
 - Display elements (Badge, Alert, Spinner, ProgressBar, Divider)
 - Tabs, Cards
 - Charts with **live auto-updating data** on a 2-second loop:
-  - AreaChart, BarChart, LineChart, PieChart, HeatmapChart, Sparkline
+  - AreaChart, BarChart, LineChart, HeatmapChart, Sparkline
 
 Click the **Showcase** button in the DevPlayground toolbar to open it, or mount it independently:
 
