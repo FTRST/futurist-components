@@ -3,10 +3,11 @@ import styled, { css } from 'styled-components';
 
 const windowInsetStyle = (settings) => ({
     default: css`
-        background-color: ${settings?.button?.primaryBg || '#02111B'};
+        background-color: ${settings?.button?.primaryBg || '#45475a'};
         margin: ${settings?.spacing?.margin || '.5em'} ${settings?.spacing?.margin || '.25em'} ${settings?.spacing?.margin || '.25em'};
         padding: ${settings?.spacing?.padding || '.25em'};
-        border: inset ${settings?.borders?.width || '.25em'} ${settings?.window?.borderColor || '#6bf178'};
+        border: 1px solid ${settings?.window?.borderColor || '#89b4fa'};
+        border-radius: 4px;
     `
 });
 

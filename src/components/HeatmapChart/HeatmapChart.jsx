@@ -1,83 +1,45 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import styled, { css } from 'styled-components';
+import { useStyleSettings } from '../../hooks/useStyleSettings';
 
-const chartContainerStyle = (settings) => css`
-  background-color: ${settings?.button?.primaryBg || '#02111B'};
-  border: ${settings?.borders?.width || '.15em'} ${settings?.borders?.style || 'solid'} ${settings?.window?.borderColor || '#6BF178'};
+const containerStyle = (settings) => css`
+  background-color: ${settings?.button?.primaryBg || '#45475a'};
+  border: ${settings?.borders?.width || '1px'} ${settings?.borders?.style || 'solid'} ${settings?.window?.borderColor || '#89b4fa'};
   padding: ${settings?.spacing?.padding || '.5em'};
-  color: ${settings?.titleBar?.textColor || '#6bf178'};
+  color: ${settings?.titleBar?.textColor || '#cdd6f4'};
+  border-radius: 4px;
 `;
 
-const StyledChartContainer = styled.div`
-  ${props => chartContainerStyle(props.styleSettings)}
-`;
+const StyledContainer = styled.div`${props => containerStyle(props.$s)}`;
 
-const ChartTitle = styled.h4`
-  margin: 0 0 0.5em 0;
-  color: ${props => props.theme?.titleBar?.textColor || '#6bf178'};
-  text-align: center;
+const Title = styled.h4`
+  margin: 0 0 0.5em 0; color: ${props => props.$s?.titleBar?.textColor || '#cdd6f4'}; text-align: center;
 `;
 
 const HeatmapChart = ({ data, title, styleSettings, className }) => {
-  const maxValue = useMemo(() => {
-    let max = 0;
-    data.forEach(row => row.forEach(cell => {
-      if (cell.value > max) max = cell.value;
-    }));
-    return max || 1;
-  }, [data]);
-  
-  const heatmapLines = useMemo(() => {
-    const lines = [];
-    
-    // Header row
-    let header = '       |';
-    data[0]?.map((_, colIndex) => {
-      const label = data[0][colIndex]?.label || `C${colIndex}`;
-      header += label.slice(0, 3).padStart(4);
-    });
-    lines.push(header);
-    
-    // Data rows
-    data.forEach((row, rowIndex) => {
-      let line = `R${rowIndex.toString().padStart(2)} |`;
-      
-      row.forEach(cell => {
-        const value = cell.value || 0;
-        const percentage = value / maxValue;
-        
-        // Choose character based on intensity
-        let char = ' ';
-        if (percentage > 0.9) char = '█';
-        else if (percentage > 0.75) char = '▓';
-        else if (percentage > 0.5) char = '▒';
-        else if (percentage > 0.25) char = '░';
-        else if (percentage > 0) char = '·';
-        
-        line += ` ${char}  `;
-      });
-      
-      lines.push(line);
-    });
-    
-    return lines;
-  }, [data, maxValue]);
+  const s = useStyleSettings(styleSettings);
+  const maxVal = Math.max(...data.flatMap(r => r.values || []), 1);
 
   return (
-    <StyledChartContainer className={`ftrst heatmap-chart ${className || ''}`} styleSettings={styleSettings}>
-      {title && <ChartTitle className="ftrst chart-title" theme={styleSettings}>{title}</ChartTitle>}
-      <pre 
-        className="ftrst chart-content"
-        style={{ 
-          fontFamily: 'monospace', 
-          fontSize: '0.7em', 
-          margin: 0,
-          lineHeight: 1.2
-        }}
-      >
-        {heatmapLines.join('\n')}
-      </pre>
-    </StyledChartContainer>
+    <StyledContainer className={`ftrst heatmap-chart ${className || ''}`} $s={s}>
+      {title && <Title className="ftrst chart-title" $s={s}>{title}</Title>}
+      <div className="ftrst heatmap-grid" style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+        {data.map((row, ri) => (
+          <div key={ri} style={{ display: 'flex', gap: '2px', alignItems: 'center' }}>
+            <span style={{ width: '3em', fontSize: '0.7em', textAlign: 'right', marginRight: '0.5em' }}>{row.label}</span>
+            {row.values.map((v, ci) => (
+              <div key={ci} style={{
+                width: '2em', height: '2em', borderRadius: '2px',
+                backgroundColor: v === 0 ? s?.button?.primaryBg || '#45475a' : s?.window?.borderColor || '#89b4fa',
+                opacity: maxVal > 0 ? v / maxVal : 0.3,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: '0.6em',
+              }} />
+            ))}
+          </div>
+        ))}
+      </div>
+    </StyledContainer>
   );
 };
 

@@ -1,58 +1,44 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import { useStyleSettings } from '../../hooks/useStyleSettings';
 
 const progressBarStyle = (settings) => css`
   width: 100%;
   height: 1em;
-  background-color: ${settings?.button?.primaryBg || '#02111B'};
-  border: ${settings?.borders?.width || '.1em'} ${settings?.borders?.style || 'solid'} ${settings?.window?.borderColor || '#6BF178'};
+  background-color: ${settings?.button?.primaryBg || '#45475a'};
+  border: 1px solid ${settings?.window?.borderColor || '#89b4fa'};
+  border-radius: 4px;
+  overflow: hidden;
 `;
 
 const StyledProgressBar = styled.div`
-  ${props => progressBarStyle(props.styleSettings)}
+  ${props => progressBarStyle(props.$s)}
   position: relative;
 `;
 
-const progressFillStyle = (settings) => css`
+const StyledProgressFill = styled.div`
   height: 100%;
-  background-color: ${settings?.window?.borderColor || '#6BF178'};
+  background-color: ${({ $s }) => $s?.window?.borderColor || '#89b4fa'};
   transition: width 0.3s ease;
 `;
 
-const StyledProgressFill = styled.div`
-  ${props => progressFillStyle(props.styleSettings)}
-`;
-
 const ProgressLabel = styled.span`
-  color: ${props => props.theme?.titleBar?.textColor || '#6bf178'};
+  color: ${({ $s }) => $s?.titleBar?.textColor || '#cdd6f4'};
   font-size: 0.875em;
   margin-top: 0.25em;
   display: block;
 `;
 
 const ProgressBar = ({ value, max = 100, showLabel = true, styleSettings, className }) => {
+  const s = useStyleSettings(styleSettings);
   const percentage = Math.min(100, Math.max(0, (value / max) * 100));
 
   return (
     <div className={`ftrst progress-container ${className || ''}`}>
-      <StyledProgressBar 
-        className="ftrst progress-bar"
-        styleSettings={styleSettings}
-      >
-        <StyledProgressFill 
-          className="ftrst progress-fill"
-          style={{ width: `${percentage}%` }}
-          styleSettings={styleSettings}
-        />
+      <StyledProgressBar className="ftrst progress-bar" $s={s}>
+        <StyledProgressFill className="ftrst progress-fill" style={{ width: `${percentage}%` }} $s={s} />
       </StyledProgressBar>
-      {showLabel && (
-        <ProgressLabel 
-          className="ftrst progress-label"
-          theme={styleSettings}
-        >
-          {Math.round(percentage)}%
-        </ProgressLabel>
-      )}
+      {showLabel && <ProgressLabel className="ftrst progress-label" $s={s}>{Math.round(percentage)}%</ProgressLabel>}
     </div>
   );
 };

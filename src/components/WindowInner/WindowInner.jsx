@@ -3,10 +3,11 @@ import styled, { css } from 'styled-components';
 
 const windowInnerStyle = (settings) => ({
     default: css`
-        border: ridge ${settings?.borders?.width || '.25em'} ${settings?.window?.borderColor || '#6bf178'};
-        background-color: ${settings?.button?.primaryBg || '#02111B'};
+        border: 1px solid ${settings?.window?.borderColor || '#89b4fa'};
+        background-color: ${settings?.button?.primaryBg || '#45475a'};
         padding: ${settings?.spacing?.padding || '.5em'};
-        color: ${settings?.titleBar?.textColor || '#6bf178'};
+        color: ${settings?.titleBar?.textColor || '#cdd6f4'};
+        border-radius: 4px;
     `
 });
 

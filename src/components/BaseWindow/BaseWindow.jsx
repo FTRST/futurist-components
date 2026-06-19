@@ -13,10 +13,10 @@ const StyleSettingsContext = createContext();
 const windowStyle = (settings) => css`
     max-width: 100%;
     position: absolute;
-    color: ${settings?.titleBar?.textColor || '#6BF178'};
+    color: ${settings?.titleBar?.textColor || '#cdd6f4'};
     padding: 0;
-    border: ${settings?.borders?.width || '.25em'} ${settings?.borders?.style || 'double'} ${settings?.window?.borderColor || '#6BF178'};
-    background-color: ${settings?.window?.backgroundColor || 'rgba(2,17,27,.7)'};
+    border: ${settings?.borders?.width || '1px'} ${settings?.borders?.style || 'solid'} ${settings?.window?.borderColor || '#89b4fa'};
+    background-color: ${settings?.window?.backgroundColor || '#1e1e2e'};
 `;
 
 const StyledWindow = styled.div`

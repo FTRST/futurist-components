@@ -1,68 +1,52 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
+import { useStyleSettings } from '../../hooks/useStyleSettings';
 
-const radioStyle = (settings) => css`
+const StyledContainer = styled.label`
   display: flex;
   align-items: center;
   gap: 0.5em;
   cursor: pointer;
   user-select: none;
+  color: ${({ $s }) => $s?.titleBar?.textColor || '#cdd6f4'};
+  font-size: 0.85em;
 `;
 
-const StyledRadioContainer = styled.label`
-  ${props => radioStyle(props.styleSettings)}
+const HiddenInput = styled.input.attrs({ type: 'radio' })`
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
 `;
 
-const RadioInput = styled.input`
-  display: none;
-`;
-
-const RadioCircle = styled.span`
+const Circle = styled.span`
   width: 1.25em;
   height: 1.25em;
-  border: ${props => props.theme?.borders?.width || '.15em'} ${props => props.theme?.borders?.style || 'solid'} ${props => props.theme?.window?.borderColor || '#6BF178'};
+  border: 2px solid ${({ $s }) => $s?.window?.borderColor || '#89b4fa'};
   border-radius: 50%;
-  background-color: transparent;
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  ${RadioInput}:checked + & {
-    border-color: ${props => props.theme?.window?.borderColor || '#6BF178'};
-  }
-
-  ${RadioInput}:checked + &:after {
+  flex-shrink: 0;
+  ${HiddenInput}:checked + &::after {
     content: '';
-    width: 0.5em;
-    height: 0.5em;
-    background-color: ${props => props.theme?.window?.borderColor || '#6BF178'};
+    width: 0.6em;
+    height: 0.6em;
+    background-color: ${({ $s }) => $s?.window?.borderColor || '#89b4fa'};
     border-radius: 50%;
   }
 `;
 
-const RadioLabel = styled.span`
-  color: ${props => props.theme?.titleBar?.textColor || '#6bf178'};
-`;
-
-const Radio = ({ checked, onChange, label, styleSettings, className }) => (
-  <StyledRadioContainer 
-    className={`ftrst radio ${className || ''}`}
-    theme={styleSettings}
-    styleSettings={styleSettings}
-  >
-    <RadioInput
-      type="radio"
-      checked={checked}
-      onChange={(e) => onChange(e.target.checked)}
-      theme={styleSettings}
-    />
-    <RadioCircle 
-      className="ftrst radio-circle"
-      checked={checked}
-      theme={styleSettings}
-    />
-    {label && <RadioLabel className="ftrst radio-label" theme={styleSettings}>{label}</RadioLabel>}
-  </StyledRadioContainer>
-);
+const Radio = ({ checked, onChange, label, styleSettings, className }) => {
+  const s = useStyleSettings(styleSettings);
+  return (
+    <StyledContainer className={`ftrst radio ${className || ''}`} $s={s}>
+      <HiddenInput checked={checked} onChange={e => onChange(e.target.checked)} />
+      <Circle className="ftrst radio-circle" $s={s} />
+      {label && <span className="ftrst radio-label">{label}</span>}
+    </StyledContainer>
+  );
+};
 
 export default Radio;

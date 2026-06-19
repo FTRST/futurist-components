@@ -1,7 +1,35 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled, { css } from 'styled-components';
+import { useStyleSettings } from '../../hooks/useStyleSettings';
 
-const toastContainerStyle = css`
+const StyledToast = styled.div`
+  background-color: ${({ $s }) => $s?.window?.backgroundColor || '#1e1e2e'};
+  border: ${({ $s }) => $s?.borders?.width || '1px'} ${({ $s }) => $s?.borders?.style || 'solid'} ${({ $s }) => $s?.window?.borderColor || '#89b4fa'};
+  padding: ${({ $s }) => $s?.spacing?.padding || '.5em'} ${({ $s }) => $s?.spacing?.padding || '.75em'};
+  color: ${({ $s }) => $s?.titleBar?.textColor || '#cdd6f4'};
+  min-width: 200px;
+  max-width: 300px;
+  border-radius: 4px;
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+  animation: slideIn 0.3s ease-out;
+  @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+`;
+
+const ToastCloseButton = styled.button`
+  background: transparent;
+  border: none;
+  color: ${({ $s }) => $s?.titleBar?.textColor || '#cdd6f4'};
+  cursor: pointer;
+  padding: 0 0.25em;
+  font-weight: bold;
+  opacity: 0.6;
+  margin-left: auto;
+  &:hover { opacity: 1; }
+`;
+
+const ToastContainer = styled.div`
   position: fixed;
   top: 1em;
   right: 1em;
@@ -11,71 +39,17 @@ const toastContainerStyle = css`
   gap: 0.5em;
 `;
 
-const StyledToastContainer = styled.div`
-  ${toastContainerStyle}
-`;
-
-const toastStyle = (settings) => css`
-  background-color: ${settings?.window?.backgroundColor || 'rgba(2,17,27,.95)'};
-  border: ${settings?.borders?.width || '.15em'} ${settings?.borders?.style || 'solid'} ${settings?.window?.borderColor || '#6BF178'};
-  padding: ${settings?.spacing?.padding || '.5em'} ${settings?.spacing?.padding || '.75em'};
-  color: ${settings?.titleBar?.textColor || '#6bf178'};
-  min-width: 200px;
-  max-width: 300px;
-  animation: slideIn 0.3s ease-out;
-`;
-
-const StyledToast = styled.div`
-  ${props => toastStyle(props.styleSettings)}
-  
-  @keyframes slideIn {
-    from {
-      transform: translateX(100%);
-      opacity: 0;
-    }
-    to {
-      transform: translateX(0);
-      opacity: 1;
-    }
-  }
-`;
-
-const ToastMessage = styled.span`
-  color: ${props => props.theme?.titleBar?.textColor || '#6bf178'};
-`;
-
-const ToastCloseButton = styled.button`
-  background: transparent;
-  border: none;
-  color: ${props => props.theme?.titleBar?.textColor || '#6bf178'};
-  cursor: pointer;
-  padding: 0 0.25em;
-  font-weight: bold;
-`;
-
-const Toast = ({ id, message, duration = 3000, onClose, styleSettings }) => {
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      onClose(id);
-    }, duration);
+const Toast = ({ id, message, onClose, styleSettings }) => {
+  const s = useStyleSettings(styleSettings);
+  React.useEffect(() => {
+    const timer = setTimeout(() => onClose(id), 3000);
     return () => clearTimeout(timer);
-  }, [id, duration, onClose]);
+  }, [id, onClose]);
 
   return (
-    <StyledToast 
-      className="ftrst toast"
-      styleSettings={styleSettings}
-    >
-      <ToastMessage className="ftrst toast-message" theme={styleSettings}>
-        {message}
-      </ToastMessage>
-      <ToastCloseButton 
-        className="ftrst toast-close"
-        onClick={() => onClose(id)}
-        theme={styleSettings}
-      >
-        ×
-      </ToastCloseButton>
+    <StyledToast className="ftrst toast" $s={s}>
+      <span className="ftrst toast-message">{message}</span>
+      <ToastCloseButton className="ftrst toast-close" onClick={() => onClose(id)} $s={s}>×</ToastCloseButton>
     </StyledToast>
   );
 };
@@ -89,34 +63,22 @@ const ToastProvider = ({ children, styleSettings }) => {
     return id;
   };
 
-  const removeToast = (id) => {
-    setToasts(prev => prev.filter(t => t.id !== id));
-  };
+  const removeToast = (id) => setToasts(prev => prev.filter(t => t.id !== id));
 
   React.useEffect(() => {
     window.ftrstToast = {
-      show: (message, duration) => addToast(message, duration),
-      success: (message, duration) => addToast(`✓ ${message}`, duration),
-      error: (message, duration) => addToast(`✗ ${message}`, duration),
-      info: (message, duration) => addToast(`ℹ ${message}`, duration)
+      show: (msg, dur) => addToast(msg, dur),
+      success: (msg, dur) => addToast(`\u2713 ${msg}`, dur),
+      error: (msg, dur) => addToast(`\u2717 ${msg}`, dur),
+      info: (msg, dur) => addToast(`\u2139 ${msg}`, dur),
     };
   }, [addToast]);
 
   return (
     <>
-      <StyledToastContainer 
-        className="ftrst toast-container"
-        styleSettings={styleSettings}
-      >
-        {toasts.map(toast => (
-          <Toast
-            key={toast.id}
-            {...toast}
-            onClose={removeToast}
-            styleSettings={styleSettings}
-          />
-        ))}
-      </StyledToastContainer>
+      <ToastContainer $s={styleSettings}>
+        {toasts.map(t => <Toast key={t.id} {...t} onClose={removeToast} styleSettings={styleSettings} />)}
+      </ToastContainer>
       {children}
     </>
   );

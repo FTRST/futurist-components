@@ -1,12 +1,10 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import { useStyleSettings } from '../../hooks/useStyleSettings';
 
 const modalOverlayStyle = (settings) => css`
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  top: 0; left: 0; right: 0; bottom: 0;
   background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
@@ -15,26 +13,28 @@ const modalOverlayStyle = (settings) => css`
 `;
 
 const StyledModalOverlay = styled.div`
-  ${props => modalOverlayStyle(props.styleSettings)}
+  ${props => modalOverlayStyle(props.$s)}
 `;
 
 const modalContentStyle = (settings) => css`
-  background-color: ${settings?.window?.backgroundColor || 'rgba(2,17,27,.9)'};
-  border: ${settings?.borders?.width || '.25em'} ${settings?.borders?.style || 'double'} ${settings?.window?.borderColor || '#6BF178'};
-  padding: ${settings?.spacing?.padding || '.5em'};
+  background-color: ${settings?.window?.backgroundColor || '#1e1e2e'};
+  border: ${settings?.borders?.width || '1px'} ${settings?.borders?.style || 'solid'} ${settings?.window?.borderColor || '#89b4fa'};
+  padding: ${settings?.spacing?.padding || '.75em'};
+  border-radius: 4px;
   max-width: 90%;
   max-height: 90%;
   overflow: auto;
+  color: ${settings?.titleBar?.textColor || '#cdd6f4'};
 `;
 
 const StyledModalContent = styled.div`
-  ${props => modalContentStyle(props.styleSettings)}
+  ${props => modalContentStyle(props.$s)}
 `;
 
 const ModalHeader = styled.h3`
-  color: ${props => props.theme?.titleBar?.textColor || '#6bf178'};
+  color: ${props => props.$s?.titleBar?.textColor || '#cdd6f4'};
   margin-top: 0;
-  border-bottom: ${props => props.theme?.borders?.width || '.1em'} solid ${props => props.theme?.window?.borderColor || '#6bf178'};
+  border-bottom: ${props => props.$s?.borders?.width || '1px'} solid ${props => props.$s?.window?.borderColor || '#89b4fa'};
   padding-bottom: 0.5em;
 `;
 
@@ -44,36 +44,19 @@ const ModalFooter = styled.div`
   gap: 0.5em;
   margin-top: 1em;
   padding-top: 0.5em;
-  border-top: ${props => props.theme?.borders?.width || '.1em'} solid ${props => props.theme?.window?.borderColor || '#6bf178'};
+  border-top: ${props => props.$s?.borders?.width || '1px'} solid ${props => props.$s?.window?.borderColor || '#89b4fa'};
 `;
 
 const Modal = ({ isOpen, onClose, title, children, footer, styleSettings }) => {
+  const s = useStyleSettings(styleSettings);
   if (!isOpen) return null;
 
   return (
-    <StyledModalOverlay 
-      className="ftrst modal-overlay"
-      onClick={onClose}
-      styleSettings={styleSettings}
-    >
-      <StyledModalContent 
-        className="ftrst modal-content"
-        onClick={(e) => e.stopPropagation()}
-        styleSettings={styleSettings}
-      >
-        {title && (
-          <ModalHeader className="ftrst modal-header" theme={styleSettings}>
-            {title}
-          </ModalHeader>
-        )}
-        <div className="ftrst modal-body">
-          {children}
-        </div>
-        {footer && (
-          <ModalFooter className="ftrst modal-footer" theme={styleSettings}>
-            {footer}
-          </ModalFooter>
-        )}
+    <StyledModalOverlay className="ftrst modal-overlay" onClick={onClose} $s={s}>
+      <StyledModalContent className="ftrst modal-content" onClick={(e) => e.stopPropagation()} $s={s}>
+        {title && <ModalHeader className="ftrst modal-header" $s={s}>{title}</ModalHeader>}
+        <div className="ftrst modal-body">{children}</div>
+        {footer && <ModalFooter className="ftrst modal-footer" $s={s}>{footer}</ModalFooter>}
       </StyledModalContent>
     </StyledModalOverlay>
   );

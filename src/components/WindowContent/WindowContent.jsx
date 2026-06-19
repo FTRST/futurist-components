@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import { useStyleSettings } from '../../hooks/useStyleSettings';
 
 const StyledContent = styled.div`
-  border: ${({ $s }) => $s?.borders?.width || '.25em'} ${({ $s }) => $s?.borders?.style || 'double'} ${({ $s }) => $s?.window?.borderColor || '#6BF178'};
-  background-color: ${({ $s }) => $s?.window?.backgroundColor || '#02111B'};
+  border: ${({ $s }) => $s?.borders?.width || '1px'} ${({ $s }) => $s?.borders?.style || 'solid'} ${({ $s }) => $s?.window?.borderColor || '#89b4fa'};
+  background-color: ${({ $s }) => $s?.window?.backgroundColor || '#1e1e2e'};
   padding: ${({ $s }) => $s?.spacing?.padding || '.75em'};
-  color: ${({ $s }) => $s?.titleBar?.textColor || '#6BF178'};
+  color: ${({ $s }) => $s?.titleBar?.textColor || '#cdd6f4'};
   box-sizing: border-box;
 `;
 

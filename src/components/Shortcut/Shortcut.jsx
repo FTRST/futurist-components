@@ -15,8 +15,8 @@ const StyledShortcut = styled.div`
 const ShortcutIcon = styled.img` height: 4em; `;
 
 const ShortcutName = styled.div`
-    background-color: ${props => props.$theme?.titleBar?.textColor || '#6bf178'};
-    color: ${props => props.$theme?.button?.primaryBg || '#02111b'};
+    background-color: ${props => props.$theme?.titleBar?.textColor || '#cdd6f4'};
+    color: ${props => props.$theme?.button?.primaryBg || '#45475a'};
     padding: .25em;
     align-items: center;
     display: grid;
