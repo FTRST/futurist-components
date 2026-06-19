@@ -1,21 +1,17 @@
 import React, { useMemo } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { useStyleSettings } from '../../hooks/useStyleSettings';
 
-const chartContainerStyle = (settings) => css`
-  background-color: ${settings?.button?.primaryBg || '#45475a'};
-  border: ${settings?.borders?.width || '1px'} ${settings?.borders?.style || 'solid'} ${settings?.window?.borderColor || '#89b4fa'};
-  padding: ${settings?.spacing?.padding || '.5em'};
-  color: ${settings?.titleBar?.textColor || '#cdd6f4'};
-`;
-
 const StyledChartContainer = styled.div`
-  ${props => chartContainerStyle(props.$s)}
+  background-color: ${({ $s }) => $s?.button?.primaryBg || '#45475a'};
+  border: ${({ $s }) => $s?.borders?.width || '1px'} ${({ $s }) => $s?.borders?.style || 'solid'} ${({ $s }) => $s?.window?.borderColor || '#89b4fa'};
+  padding: ${({ $s }) => $s?.spacing?.padding || '.5em'};
+  color: ${({ $s }) => $s?.titleBar?.textColor || '#cdd6f4'};
 `;
 
 const ChartTitle = styled.h4`
   margin: 0 0 0.5em 0;
-  color: ${props => props.$s?.titleBar?.textColor || '#cdd6f4'};
+  color: ${({ $s }) => $s?.titleBar?.textColor || '#cdd6f4'};
   text-align: center;
 `;
 

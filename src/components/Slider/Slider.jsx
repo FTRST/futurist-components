@@ -1,23 +1,19 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { useStyleSettings } from '../../hooks/useStyleSettings';
 
-const sliderContainerStyle = (settings) => css`
+const StyledSliderContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5em;
-`;
-
-const StyledSliderContainer = styled.div`
-  ${props => sliderContainerStyle(props.$s)}
 `;
 
 const SliderInput = styled.input.attrs({ type: 'range' })`
   -webkit-appearance: none;
   width: 100%;
   height: 0.5em;
-  background: ${props => props.$s?.button?.primaryBg || '#45475a'};
-  border: 1px solid ${props => props.$s?.window?.borderColor || '#89b4fa'};
+  background: ${({ $s }) => $s?.button?.primaryBg || '#45475a'};
+  border: 1px solid ${({ $s }) => $s?.window?.borderColor || '#89b4fa'};
   border-radius: 4px;
   outline: none;
   cursor: pointer;
@@ -25,7 +21,7 @@ const SliderInput = styled.input.attrs({ type: 'range' })`
     -webkit-appearance: none;
     width: 1.25em;
     height: 1.25em;
-    background: ${props => props.$s?.window?.borderColor || '#89b4fa'};
+    background: ${({ $s }) => $s?.window?.borderColor || '#89b4fa'};
     border: none;
     border-radius: 50%;
     cursor: pointer;
@@ -33,7 +29,7 @@ const SliderInput = styled.input.attrs({ type: 'range' })`
   &::-moz-range-thumb {
     width: 1.25em;
     height: 1.25em;
-    background: ${props => props.$s?.window?.borderColor || '#89b4fa'};
+    background: ${({ $s }) => $s?.window?.borderColor || '#89b4fa'};
     border: none;
     border-radius: 50%;
     cursor: pointer;
@@ -43,7 +39,7 @@ const SliderInput = styled.input.attrs({ type: 'range' })`
 `;
 
 const SliderLabel = styled.span`
-  color: ${props => props.$s?.titleBar?.textColor || '#cdd6f4'};
+  color: ${({ $s }) => $s?.titleBar?.textColor || '#cdd6f4'};
   min-width: 3em;
   text-align: right;
   font-size: 0.85em;

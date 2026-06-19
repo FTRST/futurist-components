@@ -1,31 +1,23 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
-
-const windowInnerStyle = (settings) => ({
-    default: css`
-        border: 1px solid ${settings?.window?.borderColor || '#89b4fa'};
-        background-color: ${settings?.button?.primaryBg || '#45475a'};
-        padding: ${settings?.spacing?.padding || '.5em'};
-        color: ${settings?.titleBar?.textColor || '#cdd6f4'};
-        border-radius: 4px;
-    `
-});
+import styled from 'styled-components';
+import { useStyleSettings } from '../../hooks/useStyleSettings';
 
 const StyledWindowInner = styled.div`
-  ${props => windowInnerStyle(props.$s)[props.variant || 'default']}
-  ${props => props.additionalStyles}
+  border: 1px solid ${({ $s }) => $s?.window?.borderColor || '#89b4fa'};
+  background-color: ${({ $s }) => $s?.button?.primaryBg || '#45475a'};
+  padding: ${({ $s }) => $s?.spacing?.padding || '.5em'};
+  color: ${({ $s }) => $s?.titleBar?.textColor || '#cdd6f4'};
+  border-radius: 4px;
 `;
 
-const WindowInner = React.forwardRef(({ value, children, variant = 'default', style, styleSettings }, ref) => (
-    <StyledWindowInner
-        ref={ref}
-        $s={styleSettings}
-        additionalStyles={style}
-        styleSettings={styleSettings}
-    >
-        {value}
-        {children}
+const WindowInner = React.forwardRef(({ value, children, variant = 'default', style, styleSettings }, ref) => {
+  const s = useStyleSettings(styleSettings);
+  return (
+    <StyledWindowInner ref={ref} $s={s} style={style}>
+      {value}
+      {children}
     </StyledWindowInner>
-));
+  );
+});
 
 export default WindowInner;

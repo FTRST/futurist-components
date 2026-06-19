@@ -1,17 +1,11 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { useStyleSettings } from '../../hooks/useStyleSettings';
 
-const inputVariants = (settings) => ({
-  default: css`
-    color: ${settings?.titleBar?.textColor || '#cdd6f4'};
-    background-color: ${settings?.button?.primaryBg || '#45475a'};
-    border: 1px solid ${settings?.window?.borderColor || '#89b4fa'};
-  `,
-});
-
 const StyledInput = styled.input`
-  ${props => inputVariants(props.$s)[props.$v || 'default']}
+  color: ${({ $s }) => $s?.titleBar?.textColor || '#cdd6f4'};
+  background-color: ${({ $s }) => $s?.button?.primaryBg || '#45475a'};
+  border: 1px solid ${({ $s }) => $s?.window?.borderColor || '#89b4fa'};
   padding: 0.5em 0.75em;
   border-radius: 4px;
   font-size: 0.85em;
@@ -19,14 +13,14 @@ const StyledInput = styled.input`
   box-sizing: border-box;
   width: 100%;
   transition: border-color 0.15s;
-  &:focus { border-color: ${props => props.$s?.titleBar?.textColor || '#cdd6f4'}; }
+  &:focus { border-color: ${({ $s }) => $s?.titleBar?.textColor || '#cdd6f4'}; }
   &::placeholder { opacity: 0.4; }
 `;
 
 const Input = React.forwardRef(({ value, action, variant = 'default', name, placeholder, style, styleSettings, type = 'text' }, ref) => {
   const s = useStyleSettings(styleSettings);
   return (
-    <StyledInput onChange={action} ref={ref} name={name} value={value} placeholder={placeholder} type={type} $v={variant} $s={s} className="futurist-input" additionalStyles={style} />
+    <StyledInput onChange={action} ref={ref} name={name} value={value} placeholder={placeholder} type={type} $s={s} className="futurist-input" style={style} />
   );
 });
 

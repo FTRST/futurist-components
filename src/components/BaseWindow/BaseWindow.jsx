@@ -1,26 +1,20 @@
 // src/components/BaseWindow/BaseWindow.jsx
-import React, { useRef, useState, useEffect, createContext } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Draggable from "react-draggable";
 import { Resizable } from 're-resizable';
 import TitleBar from '../TitleBar/TitleBar';
 import WindowContent from '../WindowContent/WindowContent';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { closeWindow, bringToFront, resizeWindow } from '../../utils/windowControls';
 import { useStyleSettings } from '../../hooks/useStyleSettings';
 
-const StyleSettingsContext = createContext();
-
-const windowStyle = (settings) => css`
+const StyledWindow = styled.div`
     max-width: 100%;
     position: absolute;
-    color: ${settings?.titleBar?.textColor || '#cdd6f4'};
+    color: ${({ $s }) => $s?.titleBar?.textColor || '#cdd6f4'};
     padding: 0;
-    border: ${settings?.borders?.width || '1px'} ${settings?.borders?.style || 'solid'} ${settings?.window?.borderColor || '#89b4fa'};
-    background-color: ${settings?.window?.backgroundColor || '#1e1e2e'};
-`;
-
-const StyledWindow = styled.div`
-    ${props => windowStyle(props.$s)}
+    border: ${({ $s }) => $s?.borders?.width || '1px'} ${({ $s }) => $s?.borders?.style || 'solid'} ${({ $s }) => $s?.window?.borderColor || '#89b4fa'};
+    background-color: ${({ $s }) => $s?.window?.backgroundColor || '#1e1e2e'};
 `;
 
 const BaseWindow = ({
@@ -28,7 +22,6 @@ const BaseWindow = ({
     device,
     manipulateWindows,
     children,
-    style,
     styleSettings
 }) => {
     
@@ -119,7 +112,7 @@ const handleResizeStop = (e, direction, ref, delta, position) => {
                     onStart={handlePositionChange}
                     onDrag={(e, data) => setDragPosition({ x: data.x, y: data.y })}
                 >
-                    <StyledWindow style={{ zIndex: windowDetails.zIndex }} additionalStyle={style} $s={styleSettings}>
+                    <StyledWindow style={{ zIndex: windowDetails.zIndex }} $s={s}>
                         <Resizable
                             size={{ width: windowDetails.width, height: windowDetails.height }}
                             onResizeStop={handleResizeStop}
@@ -164,5 +157,4 @@ const handleResizeStop = (e, direction, ref, delta, position) => {
     );
 };
 
-export { StyleSettingsContext };
 export default BaseWindow;

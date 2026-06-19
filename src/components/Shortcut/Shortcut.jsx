@@ -15,8 +15,8 @@ const StyledShortcut = styled.div`
 const ShortcutIcon = styled.img` height: 4em; `;
 
 const ShortcutName = styled.div`
-    background-color: ${props => props.$theme?.titleBar?.textColor || '#cdd6f4'};
-    color: ${props => props.$theme?.button?.primaryBg || '#45475a'};
+    background-color: ${({ $s }) => $s?.titleBar?.textColor || '#cdd6f4'};
+    color: ${({ $s }) => $s?.button?.primaryBg || '#45475a'};
     padding: .25em;
     align-items: center;
     display: grid;
@@ -43,15 +43,10 @@ const Shortcut = ({width, icon, name, action, styleSettings}) => {
         }
     };
 
-    const theme = {
-        titleBar: { textColor: s?.titleBar?.textColor },
-        button: { primaryBg: s?.button?.primaryBg },
-    };
-
     const inner = (
         <StyledShortcut onClick={action}>
             <div><ShortcutIcon src={icon} /></div>
-            <ShortcutName $theme={theme}>{name}</ShortcutName>
+            <ShortcutName $s={s}>{name}</ShortcutName>
         </StyledShortcut>
     );
 

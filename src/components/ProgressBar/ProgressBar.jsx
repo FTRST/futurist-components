@@ -1,18 +1,14 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { useStyleSettings } from '../../hooks/useStyleSettings';
 
-const progressBarStyle = (settings) => css`
+const StyledProgressBar = styled.div`
   width: 100%;
   height: 1em;
-  background-color: ${settings?.button?.primaryBg || '#45475a'};
-  border: 1px solid ${settings?.window?.borderColor || '#89b4fa'};
+  background-color: ${({ $s }) => $s?.button?.primaryBg || '#45475a'};
+  border: 1px solid ${({ $s }) => $s?.window?.borderColor || '#89b4fa'};
   border-radius: 4px;
   overflow: hidden;
-`;
-
-const StyledProgressBar = styled.div`
-  ${props => progressBarStyle(props.$s)}
   position: relative;
 `;
 

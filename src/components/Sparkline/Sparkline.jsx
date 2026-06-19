@@ -1,16 +1,12 @@
 import React, { useMemo } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { useStyleSettings } from '../../hooks/useStyleSettings';
 
-const sparklineStyle = (settings) => css`
+const StyledSparkline = styled.span`
   display: inline-flex;
   align-items: center;
   gap: 0.5em;
-  color: ${settings?.titleBar?.textColor || '#cdd6f4'};
-`;
-
-const StyledSparkline = styled.span`
-  ${props => sparklineStyle(props.$s)}
+  color: ${({ $s }) => $s?.titleBar?.textColor || '#cdd6f4'};
 `;
 
 const Sparkline = ({ data, width = 20, height = 4, styleSettings, className }) => {

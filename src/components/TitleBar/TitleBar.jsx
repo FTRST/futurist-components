@@ -2,16 +2,11 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { useStyleSettings } from '../../hooks/useStyleSettings';
 
-const titleBarStyle = (settings) => css`
-  display: flex;
-  background-color: ${settings?.titleBar?.backgroundColor || '#181825'};
-  color: ${settings?.titleBar?.textColor || '#cdd6f4'};
-  border-bottom: ${settings?.borders?.style || 'solid'} ${settings?.borders?.width || '1px'} ${settings?.window?.borderColor || '#89b4fa'};
-`;
-
 const StyledTitleBar = styled.strong`
-  ${props => titleBarStyle(props.$s)}
-  ${props => props.$as}
+  display: flex;
+  background-color: ${({ $s }) => $s?.titleBar?.backgroundColor || '#181825'};
+  color: ${({ $s }) => $s?.titleBar?.textColor || '#cdd6f4'};
+  border-bottom: ${({ $s }) => $s?.borders?.style || 'solid'} ${({ $s }) => $s?.borders?.width || '1px'} ${({ $s }) => $s?.window?.borderColor || '#89b4fa'};
 `;
 
 const StyledTitle = styled.div`
@@ -56,7 +51,7 @@ const StyledMinimizeButton = styled.button`
 const TitleBar = React.forwardRef(({ title, expandAction, closeAction, minimizeAction, style, maximize = false, styleSettings }, ref) => {
   const s = useStyleSettings(styleSettings);
   return (
-    <StyledTitleBar className="modal-title-bar" ref={ref} $as={style} $s={s}>
+    <StyledTitleBar className="modal-title-bar" ref={ref} style={style} $s={s}>
       {!maximize ? (
         <StyledMaximizeButton className="modal-maximize" onClick={expandAction} onTouchStart={expandAction} $s={s} title="Maximize">⛶</StyledMaximizeButton>
       ) : (
