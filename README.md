@@ -208,6 +208,77 @@ All components accept `styleSettings` as an optional prop. None require it when 
 
 ---
 
+## Window Stacking & Lifecycle
+
+The window system (BaseWindow) is managed by the `windowManipulatorAtom` — a single Jotai writable atom that handles every window action. This atom lives in the **parent project's** state and is shared by all spawned windows.
+
+### Spawning a window
+
+```jsx
+import { useSetAtom } from 'jotai';
+import { windowManipulatorAtom, BaseWindow } from 'futurist-components';
+
+function App() {
+  const manipulateWindows = useSetAtom(windowManipulatorAtom);
+
+  const openWindow = () => {
+    manipulateWindows({
+      type: 'add',
+      window: {
+        id: 'my-window-' + Date.now(),
+        title: 'New Window',
+        width: '400px',
+        height: '300px',
+        zIndex: 99999,
+      }
+    });
+  };
+
+  return (
+    <>
+      <Button label="Open Window" action={openWindow} />
+      {device.windows.map(w => (
+        <BaseWindow
+          key={w.id}
+          id={w.id}
+          device={device}
+          manipulateWindows={manipulateWindows}
+          styleSettings={styleSettings}
+        >
+          Content here
+        </BaseWindow>
+      ))}
+    </>
+  );
+}
+```
+
+### Window operations
+
+| Action | Code | Effect |
+|---|---|---|
+| **Add** | `manipulateWindows({type:'add', window:{id,title,width,height,zIndex}})` | Creates a new window |
+| **Remove** | `manipulateWindows({type:'remove', window:{id}})` | Closes the window |
+| **Update** | `manipulateWindows({type:'update', window:{id, props}})` | Resize/move/maximize |
+| **Bring to front** | `manipulateWindows({type:'reindex', window:{id}})` | Stack above others |
+
+### Z-index stacking
+
+The `reindex` operation brings a window to the top:
+- Target window gets `zIndex: 99999`
+- All other windows are re-indexed in array order from `99998` downward
+
+This means the **array order** determines stacking fallback. Newly added windows are at the end and naturally sit on top when multiple have the same zIndex cascade.
+
+### BaseWindow features
+
+- **Drag:** Controlled by `react-draggable`. Only the title bar (`.modal-title-bar`) is the drag handle. Boundary is the parent element (`bounds="parent"`).
+- **Resize:** Controlled by `re-resizable`. Enforces `minConstraints` and `maxConstraints` from `styleSettings.dimensions`. Clamps to viewport bounds.
+- **Maximize:** Expands to fill the viewport, saves previous size/position to `prevWidth/prevHeight/prevTop/prevLeft`. Minimize restores them.
+- **Init position:** Each new window cascades from `{x:30, y:30}` by 25px offset per window index to prevent perfect overlap.
+
+---
+
 ## DevPlayground
 
 The **DevPlayground** is a development workspace bundled with the library for iterating on components and theming.
@@ -225,6 +296,24 @@ Features:
 - **Live theme controls** — color pickers, border width/style, spacing, dimensions
 - **Copy/Import theme** — share themes as JSON
 - **Debug panel** — inspect window state (id, size, z-index, stacking order)
+
+### ComponentShowcase
+
+A dedicated view showing **every component** in a scrollable layout with live interactive demos:
+
+- Form controls (Input, Select, Textarea, Checkbox, Toggle, Radio, Slider)
+- Buttons (default, primary, ghost, disabled)
+- Display elements (Badge, Alert, Spinner, ProgressBar, Divider)
+- Tabs, Cards
+- Charts with **live auto-updating data** on a 2-second loop:
+  - AreaChart, BarChart, LineChart, PieChart, HeatmapChart, Sparkline
+
+Click the **Showcase** button in the DevPlayground toolbar to open it, or mount it independently:
+
+```jsx
+import { ComponentShowcase } from 'futurist-components';
+<ComponentShowcase onBack={() => setView('playground')} />
+```
 
 ---
 

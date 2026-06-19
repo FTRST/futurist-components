@@ -16,6 +16,8 @@ const StyledTabContainer = styled.div`
   border-top: none;
   padding: ${props => props.$s?.spacing?.padding || '.75em'};
   background-color: ${props => props.$s?.window?.backgroundColor || '#1e1e2e'};
+  /* Subtle lightening overlay so content area is distinguishable from tab bar */
+  background-image: linear-gradient(rgba(255,255,255,0.04), rgba(255,255,255,0.04));
   color: ${props => props.$s?.titleBar?.textColor || '#cdd6f4'};
 `;
 

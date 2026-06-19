@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { useAtom, useSetAtom } from 'jotai';
 import { useDeviceDetail } from '../../states/deviceDetail';
 import { windowManipulatorAtom } from '../../states/deviceDetailState';
@@ -15,6 +15,13 @@ import Textarea from '../Textarea/Textarea';
 import Toggle from '../Toggle/Toggle';
 import WindowContent from '../WindowContent/WindowContent';
 import WindowTitle from '../WindowTitle/WindowTitle';
+import ComponentShowcase from '../ComponentShowcase/ComponentShowcase';
+import AreaChart from '../AreaChart/AreaChart';
+import BarChart from '../BarChart/BarChart';
+import LineChart from '../LineChart/LineChart';
+import HeatmapChart from '../HeatmapChart/HeatmapChart';
+import Sparkline from '../Sparkline/Sparkline';
+import TabContainer from '../TabContainer/TabContainer';
 import { openWindow } from '../../utils/windowControls';
 import { themeAtom, updateThemeAtom, themes } from '../../states/themeState';
 
@@ -24,6 +31,8 @@ const WINDOW_TEMPLATES = [
   { id: 'terminal', title: 'Terminal', width: '500px', height: '300px' },
   { id: 'files', title: 'File Manager', width: '600px', height: '450px' },
   { id: 'preview', title: 'Preview', width: '350px', height: '250px' },
+  { id: 'charts', title: 'Charts', width: '500px', height: '450px' },
+  { id: 'tabs', title: 'Tab Demo', width: '500px', height: '350px' },
 ];
 
 let idCounter = 0;
@@ -40,6 +49,7 @@ export default function DevPlayground() {
   const [showTheme, setShowTheme] = useState(true);
   const [showDebug, setShowDebug] = useState(false);
   const [showImport, setShowImport] = useState(false);
+  const [showcase, setShowcase] = useState(false);
   const [importValue, setImportValue] = useState('');
   const [copyFeedback, setCopyFeedback] = useState('');
   const importRef = useRef(null);
@@ -48,6 +58,53 @@ export default function DevPlayground() {
   const [demoText, setDemoText] = useState('');
   const [demoSelect, setDemoSelect] = useState('');
   const [demoToggle, setDemoToggle] = useState(false);
+
+  // ── live chart demo data ────────────────────────────────────────────────────
+  const rng = () => Math.floor(Math.random() * 100);
+  const genData = (n, fn) => Array.from({ length: n }, (_, i) => fn(i));
+  const genChartData = (n) => genData(n, (i) => ({ label: `Item ${i + 1}`, value: rng() }));
+
+  const [chartDemoData, setChartDemoData] = useState({
+    area: genChartData(8),
+    bar: genChartData(5),
+    line: genChartData(10),
+    heatmap: [
+      { label: 'Mon', values: genData(5, rng) },
+      { label: 'Tue', values: genData(5, rng) },
+      { label: 'Wed', values: genData(5, rng) },
+      { label: 'Thu', values: genData(5, rng) },
+    ],
+    spark: genData(25, rng),
+  });
+  const chartIntervalRef = useRef(null);
+
+  // Start/stop chart data loop when windows are open
+  useEffect(() => {
+    if (device?.windows?.some(w => w.title === 'Charts')) {
+      if (!chartIntervalRef.current) {
+        chartIntervalRef.current = setInterval(() => {
+          setChartDemoData({
+            area: genChartData(8),
+            bar: genChartData(5),
+            line: genChartData(10),
+            heatmap: [
+              { label: 'Mon', values: genData(5, rng) },
+              { label: 'Tue', values: genData(5, rng) },
+              { label: 'Wed', values: genData(5, rng) },
+              { label: 'Thu', values: genData(5, rng) },
+            ],
+            spark: genData(25, rng),
+          });
+        }, 2000);
+      }
+    } else {
+      if (chartIntervalRef.current) {
+        clearInterval(chartIntervalRef.current);
+        chartIntervalRef.current = null;
+      }
+    }
+    return () => { if (chartIntervalRef.current) clearInterval(chartIntervalRef.current); };
+  }, [device?.windows]);
 
   // ── apply a preset ─────────────────────────────────────────────────────────
   const applyPreset = useCallback((name) => {
@@ -126,6 +183,10 @@ export default function DevPlayground() {
         alert('Invalid JSON: ' + e.message);
       }
     }, [importValue, setAtomTheme]);
+
+  if (showcase) {
+    return <ComponentShowcase onBack={() => setShowcase(false)} />;
+  }
 
   // ── render demo content per window type ─────────────────────────────────────
   const renderWindowContent = (w, ctx) => {
@@ -222,6 +283,52 @@ export default function DevPlayground() {
                 <Badge label={f.badge} variant={f.badge} styleSettings={s} />
               </div>
             ))}
+          </div>
+        );
+
+      case 'Charts':
+        return (
+          <div>
+            <WindowTitle value={w.title} styleSettings={s} />
+            <div style={{ fontSize: '0.75em', opacity: 0.5, marginBottom: '0.5em' }}>Live data — updates every 2s while open</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5em' }}>
+              <Sparkline data={chartDemoData.spark} styleSettings={s} />
+              <BarChart data={chartDemoData.bar} title="Bar Chart" styleSettings={s} />
+              <LineChart data={chartDemoData.line} title="Line Chart" styleSettings={s} />
+              <AreaChart data={chartDemoData.area} title="Area Chart" styleSettings={s} />
+              <HeatmapChart data={chartDemoData.heatmap} title="Heatmap" styleSettings={s} />
+            </div>
+          </div>
+        );
+
+      case 'Tab Demo':
+        return (
+          <div>
+            <WindowTitle value={w.title} styleSettings={s} />
+            <TabContainer tabComponents={{
+              'Details': () => (
+                <div>
+                  <p style={{ margin: '0 0 0.5em 0', fontSize: '0.85em' }}>Tab content area — each tab shows different content.</p>
+                  <Input value={ctx.demoInput} action={e => ctx.setDemoInput(e.target.value)} placeholder="Type in this tab..." styleSettings={s} />
+                </div>
+              ),
+              'Settings': () => (
+                <div>
+                  <div style={{ marginBottom: '0.5em' }}><Toggle checked={ctx.demoToggle} action={e => ctx.setDemoToggle(e.target.checked)} label="Enable feature" styleSettings={s} /></div>
+                  <Checkbox checked={ctx.demoCheck} action={e => ctx.setDemoCheck(e.target.checked)} label="Show on dashboard" styleSettings={s} />
+                </div>
+              ),
+              'Stats': () => (
+                <div>
+                  <div style={{ display: 'flex', gap: '0.5em', marginBottom: '0.5em' }}>
+                    <Badge label="Active" variant="success" styleSettings={s} />
+                    <Badge label="12 items" variant="info" styleSettings={s} />
+                    <Badge label="3 warnings" variant="warning" styleSettings={s} />
+                  </div>
+                  <div style={{ fontSize: '0.85em', opacity: 0.8 }}>Status: all systems operational.</div>
+                </div>
+              ),
+            }} styleSettings={s} />
           </div>
         );
 
@@ -338,6 +445,22 @@ export default function DevPlayground() {
           }}
         >
           Debug
+        </button>
+
+        {/* Showcase button */}
+        <button
+          onClick={() => setShowcase(true)}
+          style={{
+            padding: '0.3em 0.6em',
+            fontSize: '0.8em',
+            background: '#2a2a3e',
+            color: '#ccc',
+            border: '1px solid #555',
+            borderRadius: '4px',
+            cursor: 'pointer',
+          }}
+        >
+          Showcase
         </button>
 
         {/* Copy theme button */}
